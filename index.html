@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AVIATOR PREDICTOR — SkyBet Kenya</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#08080f;--bg2:#0f0f18;--bg3:#161622;--bg4:#1c1c2e;
+  --border:#252535;--border2:#353550;
+  --red:#e8321a;--red2:#c02510;--red-glow:rgba(232,50,26,0.4);
+  --orange:#ff6b00;--green:#00c853;--green2:#009e40;
+  --green-glow:rgba(0,200,83,0.4);--gold:#ffb300;
+  --blue:#29b6f6;--purple:#9c27b0;
+  --text:#f0f0f8;--text2:#7a7a9a;--text3:#a0a0c0;
+  --panel:#0c0c18;--card:#111120;
+}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type=number]{-moz-appearance:textfield;}
+.header{background:linear-gradient(90deg,#0a0a14,#12121e);border-bottom:2px solid var(--red);padding:0 12px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:200;box-shadow:0 2px 20px rgba(232,50,26,0.2);position:relative;}
+.logo{display:flex;align-items:center;gap:8px;}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--red),var(--orange));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 16px var(--red-glow);}
+.logo-name{font-family:'Exo 2',sans-serif;font-size:16px;font-weight:900;color:#fff;}
+.logo-name span{color:var(--red);}
+.logo-sub{font-size:8px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;}
+.hdr-mid{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;}
+.live-dot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:ldot 1s infinite;}
+@keyframes ldot{0%,100%{opacity:1}50%{opacity:.15}}
+.hdr-right{display:flex;align-items:center;gap:7px;}
+.plan-badge{display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;}
+.plan-free{background:rgba(122,122,154,.15);border:1px solid rgba(122,122,154,.3);color:var(--text2);}
+.plan-pro{background:rgba(255,179,0,.12);border:1px solid rgba(255,179,0,.3);color:var(--gold);}
+.plan-vip{background:rgba(156,39,176,.15);border:1px solid rgba(156,39,176,.35);color:#ce93d8;}
+.user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;border:2px solid var(--border2);}
+.logout-btn{background:rgba(232,50,26,.1);border:1px solid rgba(232,50,26,.25);border-radius:7px;padding:5px 10px;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;font-family:'Rajdhani',sans-serif;transition:all .2s;}
+.logout-btn:hover{background:rgba(232,50,26,.18);}
+.main-wrap{flex:1;display:flex;overflow:hidden;min-height:0;}
+.left-nav{width:60px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:4px;}
+@media(max-width:680px){.left-nav{display:none;}}
+.nav-btn{width:42px;height:42px;border-radius:9px;background:transparent;border:none;color:var(--text2);font-size:18px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;position:relative;}
+.nav-btn span{font-size:7px;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.3px;}
+.nav-btn.on{background:rgba(232,50,26,.12);color:var(--red);}
+.nav-btn:hover:not(.on){background:rgba(255,255,255,.04);color:var(--text3);}
+.nav-sep{width:30px;height:1px;background:var(--border);margin:3px 0;}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;}
+.page{display:none;}
+.page.active{display:block;}
+.auth-screen{position:fixed;inset:0;z-index:1000;background:radial-gradient(ellipse at 50% 0%,rgba(232,50,26,.14) 0%,transparent 60%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.auth-screen.hide{display:none;}
+.auth-logo-icon{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 0 40px var(--red-glow);animation:iconpulse 2s ease-in-out infinite;margin-bottom:14px;}
+@keyframes iconpulse{0%,100%{box-shadow:0 0 40px var(--red-glow)}50%{box-shadow:0 0 70px var(--red-glow),0 0 110px rgba(232,50,26,.18)}}
+.auth-title{font-family:'Exo 2',sans-serif;font-size:26px;font-weight:900;color:#fff;text-align:center;}
+.auth-title span{color:var(--red);}
+.auth-sub{font-size:12px;color:var(--text2);text-align:center;margin-bottom:22px;}
+.auth-box{width:100%;max-width:370px;background:var(--bg2);border:1px solid var(--border);border-radius:17px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.auth-tabs{display:flex;background:var(--bg3);border-radius:9px;padding:3px;margin-bottom:18px;}
+.auth-tab{flex:1;padding:8px;border:none;background:transparent;color:var(--text2);font-family:'Exo 2',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:7px;transition:all .2s;}
+.auth-tab.on{background:var(--red);color:#fff;box-shadow:0 2px 10px var(--red-glow);}
+.field{margin-bottom:13px;}
+.field-lbl{font-size:11px;color:var(--text2);font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.field-inp{width:100%;height:44px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0 13px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.field-inp:focus{border-color:var(--red);}
+.field-inp::placeholder{color:var(--text2);}
+.auth-btn{width:100%;padding:13px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px var(--red-glow);margin-top:4px;}
+.auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--red-glow);}
+.divider{display:flex;align-items:center;gap:9px;margin:12px 0;color:var(--text2);font-size:11px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.demo-btn{width:100%;padding:10px;border:1px solid var(--border);border-radius:9px;background:transparent;color:var(--text3);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.demo-btn:hover{border-color:var(--border2);color:var(--text);}
+.terms{font-size:10px;color:var(--text2);text-align:center;margin-top:11px;line-height:1.5;}
+.terms a{color:var(--red);cursor:pointer;}
+.pred-wrap{padding:12px;overflow-y:auto;height:100%;}
+.tracker-bar{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 13px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tracker-live{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--red);flex-shrink:0;}
+.tb-item{display:flex;flex-direction:column;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 10px;flex-shrink:0;}
+.tb-val{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;}
+.tb-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.track-status{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap;}
+.ts-pill{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;}
+.ts-connected{background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.25);color:var(--green);}
+.ts-waiting{background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.25);color:var(--gold);}
+.ts-flying{background:rgba(232,50,26,.1);border:1px solid rgba(232,50,26,.25);color:var(--red);animation:ldot 1s infinite;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px;}
+@media(max-width:560px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px;text-align:center;}
+.stat-val{font-family:'Exo 2',sans-serif;font-size:19px;font-weight:800;}
+.stat-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.pred-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;}
+.pred-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--orange),var(--gold));}
+.pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.pc-title{font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;}
+.conf-pill{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.pred-num-wrap{text-align:center;padding:8px 0 14px;position:relative;}
+.pred-num{font-family:'Exo 2',sans-serif;font-size:clamp(50px,13vw,92px);font-weight:900;line-height:1;transition:all .4s;position:relative;display:inline-block;}
+.pred-num.c-safe{color:var(--green);filter:drop-shadow(0 0 22px rgba(0,200,83,.7));}
+.pred-num.c-mid{color:var(--gold);filter:drop-shadow(0 0 22px rgba(255,179,0,.6));}
+.pred-num.c-high{color:var(--orange);filter:drop-shadow(0 0 22px rgba(255,107,0,.6));}
+.pred-num.c-mega{color:var(--red);filter:drop-shadow(0 0 28px rgba(232,50,26,.8));animation:megapulse .6s ease-in-out infinite alternate;}
+@keyframes megapulse{from{transform:scale(1)}to{transform:scale(1.06)}}
+.pred-num.scanning{color:var(--text2);animation:scan .4s linear infinite;}
+@keyframes scan{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+.pred-sublbl{font-family:'Exo 2',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-top:4px;}
+.conf-section{margin-bottom:13px;}
+.conf-hdr{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px;color:var(--text2);font-weight:700;}
+.conf-bg{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.conf-fill{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.34,1.56,.64,1);}
+.range-row{display:flex;gap:7px;margin-bottom:12px;}
+.rp{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:9px 7px;text-align:center;}
+.rp-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.rp-val{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;}
+.algo-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;background:rgba(41,182,246,.05);border:1px solid rgba(41,182,246,.12);border-radius:9px;padding:9px 12px;}
+.algo-icon{font-size:18px;flex-shrink:0;}
+.algo-text{font-size:11px;color:var(--text3);line-height:1.5;flex:1;}
+.algo-text strong{color:var(--blue);}
+.gen-btn{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px var(--red-glow);}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--red-glow);}
+.gen-btn:active{transform:scale(.98);}
+.gen-btn.loading{opacity:.7;cursor:not-allowed;background:linear-gradient(135deg,#555,#333);}
+.signals-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+@media(max-width:380px){.signals-grid{grid-template-columns:1fr;}}
+.sig-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px;}
+.sig-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.sig-name{font-size:11px;font-weight:700;color:var(--text2);}
+.sig-dot{width:7px;height:7px;border-radius:50%;transition:background .4s;}
+.sig-val{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:800;margin-bottom:4px;transition:color .4s;}
+.sig-bar-bg{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.sig-bar{height:100%;border-radius:2px;transition:width 1s ease,background .4s;}
+.pattern-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.sec-title{font-family:'Exo 2',sans-serif;font-size:13px;font-weight:800;}
+.sec-badge{font-size:9px;padding:3px 8px;border-radius:10px;font-weight:700;}
+.real-hist-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.rh-pill{padding:3px 9px;border-radius:14px;font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;cursor:default;}
+.rh-low{background:rgba(0,200,83,.1);color:var(--green);border:1px solid rgba(0,200,83,.2);}
+.rh-mid{background:rgba(41,182,246,.1);color:var(--blue);border:1px solid rgba(41,182,246,.2);}
+.rh-high{background:rgba(255,179,0,.12);color:var(--gold);border:1px solid rgba(255,179,0,.25);}
+.rh-moon{background:rgba(255,107,0,.12);color:var(--orange);border:1px solid rgba(255,107,0,.3);}
+.rh-mega{background:linear-gradient(90deg,rgba(232,50,26,.18),rgba(255,107,0,.18));color:#ff7043;border:1px solid rgba(255,107,0,.4);}
+.rh-next{background:linear-gradient(135deg,rgba(232,50,26,.2),rgba(255,107,0,.2));color:#fff;border:2px dashed var(--orange)!important;animation:nextpulse 1s ease-in-out infinite;}
+@keyframes nextpulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(255,107,0,.5)}}
+.pattern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
+.pg-item{background:var(--bg3);border-radius:8px;padding:9px;text-align:center;}
+.pg-val{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;}
+.pg-lbl{font-size:9px;color:var(--text2);margin-top:2px;}
+.insight-box{background:rgba(41,182,246,.04);border:1px solid rgba(41,182,246,.12);border-radius:9px;padding:10px 12px;margin-bottom:10px;}
+.ib-title{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.ib-item{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:11px;color:var(--text3);}
+.ib-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.strat-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.tip-item{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);}
+.tip-item:last-child{border-bottom:none;padding-bottom:0;}
+.tip-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.tip-title{font-size:12px;font-weight:700;margin-bottom:2px;}
+.tip-body{font-size:11px;color:var(--text2);line-height:1.5;}
+.lock-wrap{position:relative;margin-bottom:12px;border-radius:14px;overflow:hidden;}
+.lock-inner{opacity:.22;pointer-events:none;user-select:none;}
+.lock-over{position:absolute;inset:0;background:rgba(8,8,15,.88);backdrop-filter:blur(5px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:18px;border-radius:14px;}
+.lock-icon{font-size:30px;}
+.lock-title{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;color:#fff;}
+.lock-sub{font-size:11px;color:var(--text2);}
+.lock-btn{margin-top:4px;padding:7px 16px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--gold),var(--orange));color:#000;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s;}
+.lock-btn:hover{transform:scale(1.04);}
+.ticker-wrap{background:var(--bg2);border-top:1px solid var(--border);padding:5px 10px;flex-shrink:0;display:flex;align-items:center;gap:7px;overflow:hidden;position:sticky;bottom:0;}
+.ticker-lbl{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;flex-shrink:0;}
+.ticker-scroll{flex:1;overflow:hidden;white-space:nowrap;}
+.ticker-inner{display:inline-block;animation:scrolltick 28s linear infinite;font-size:10px;font-weight:600;color:var(--text2);}
+@keyframes scrolltick{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+.hist-page{padding:12px;overflow-y:auto;height:100%;}
+.hist-filters{display:flex;gap:5px;margin-bottom:11px;flex-wrap:wrap;}
+.hf{padding:5px 12px;border:1px solid var(--border);border-radius:18px;background:transparent;color:var(--text2);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;}
+.hf.on{background:rgba(232,50,26,.1);border-color:rgba(232,50,26,.4);color:var(--red);}
+.ht-row{display:grid;grid-template-columns:36px 1fr 70px 70px 70px;gap:6px;padding:8px 7px;border-bottom:1px solid rgba(255,255,255,.028);align-items:center;font-size:11px;}
+.ht-hdr .ht-cell{color:var(--text2);font-size:9px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+.ht-cell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@media(max-width:460px){.ht-row{grid-template-columns:28px 1fr 55px 55px;}.ht-row .ht-cell:nth-child(4){display:none;}}
+.winners-page{padding:12px;overflow-y:auto;height:100%;}
+.winner-card{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 13px;margin-bottom:8px;transition:all .2s;cursor:default;}
+.winner-card:hover{border-color:var(--border2);background:rgba(255,255,255,.02);}
+.winner-card.top1{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.03);}
+.winner-card.top2{border-color:rgba(192,192,192,.2);background:rgba(192,192,192,.02);}
+.winner-card.top3{border-color:rgba(205,127,50,.2);background:rgba(205,127,50,.02);}
+.wc-rank{font-size:18px;flex-shrink:0;width:26px;text-align:center;}
+.wc-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid var(--border2);}
+.wc-info{flex:1;min-width:0;}
+.wc-name{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wc-detail{font-size:11px;color:var(--text2);margin-top:1px;}
+.wc-time{font-size:9px;color:var(--text2);margin-top:2px;}
+.wc-win{text-align:right;flex-shrink:0;}
+.wc-amount{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);}
+.wc-mult{font-size:10px;color:var(--text2);margin-top:2px;}
+.gen-page{padding:12px;overflow-y:auto;height:100%;}
+.settings-sec{background:var(--card);border:1px solid var(--border);border-radius:13px;margin-bottom:11px;overflow:hidden;}
+.ss-title{padding:11px 13px;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:800;color:var(--text2);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.5px;}
+.ss-row{display:flex;align-items:center;justify-content:space-between;padding:12px 13px;border-bottom:1px solid rgba(255,255,255,.026);}
+.ss-row:last-child{border-bottom:none;}
+.ss-name{font-size:12px;font-weight:700;}
+.ss-desc{font-size:10px;color:var(--text2);margin-top:1px;}
+.toggle{width:38px;height:20px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;position:relative;cursor:pointer;transition:all .3s;flex-shrink:0;}
+.toggle.on{background:var(--green);border-color:var(--green);}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:2px;left:2px;transition:all .3s;}
+.toggle.on::after{left:20px;}
+.sel-inp{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 9px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:12px;outline:none;}
+.profile-hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:15px;padding:18px;text-align:center;margin-bottom:11px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(232,50,26,.1),transparent 70%);}
+.ph-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 11px;border:3px solid var(--border2);box-shadow:0 0 22px var(--red-glow);}
+.ph-name{font-family:'Exo 2',sans-serif;font-size:19px;font-weight:800;}
+.ph-email{font-size:11px;color:var(--text2);margin-top:2px;}
+.ph-plan-badge{display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:5px 13px;border-radius:18px;font-size:11px;font-weight:700;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:11px;}
+.pr-stat{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px;text-align:center;}
+.prs-val{font-family:'Exo 2',sans-serif;font-size:17px;font-weight:800;}
+.prs-lbl{font-size:9px;color:var(--text2);margin-top:2px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(8px);z-index:800;display:none;align-items:flex-end;justify-content:center;}
+.modal-bg.show{display:flex;}
+.sub-modal{width:100%;max-width:450px;background:var(--bg2);border-radius:18px 18px 0 0;border-top:1px solid var(--border);max-height:92vh;overflow-y:auto;animation:slideup .32s cubic-bezier(.34,1.56,.64,1);}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.m-handle{width:38px;height:4px;background:var(--border2);border-radius:2px;margin:11px auto 0;}
+.m-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 11px;border-bottom:1px solid var(--border);}
+.m-title{font-family:'Exo 2',sans-serif;font-size:16px;font-weight:800;}
+.m-close{width:30px;height:30px;background:var(--bg3);border:none;border-radius:7px;color:var(--text2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.m-close:hover{background:rgba(232,50,26,.1);color:var(--red);}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:16px 14px 12px;}
+@media(max-width:440px){.plan-grid{grid-template-columns:1fr;}}
+.plan-card{border:2px solid var(--border);border-radius:13px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.plan-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.plan-card.sel{border-color:var(--red);background:rgba(232,50,26,.06);}
+.plan-card.popular{border-color:var(--gold);}
+.pop-tag{position:absolute;top:0;right:0;background:var(--gold);color:#000;font-size:8px;font-weight:800;padding:3px 7px;border-radius:0 11px 0 7px;letter-spacing:.5px;}
+.plan-icon{font-size:26px;margin-bottom:7px;}
+.plan-name{font-family:'Exo 2',sans-serif;font-size:13px;font-weight:800;margin-bottom:3px;}
+.plan-price{font-family:'Share Tech Mono',monospace;font-size:19px;font-weight:700;color:var(--gold);}
+.plan-per{font-size:9px;color:var(--text2);margin-bottom:9px;}
+.pf{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3);margin-bottom:3px;text-align:left;}
+.pf.yes{color:var(--green);}
+.pf.no{opacity:.45;}
+.pay-how{padding:0 14px 14px;}
+.ph-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:9px;text-transform:uppercase;letter-spacing:.5px;}
+.pm-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:11px;}
+.pm{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:6px 11px;cursor:pointer;transition:all .2s;font-size:11px;font-weight:700;}
+.pm:hover{border-color:var(--border2);}
+.pm.sel{border-color:var(--red);background:rgba(232,50,26,.08);color:var(--red);}
+.pay-num-box{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px 13px;margin-bottom:11px;}
+.pnb-title{font-size:11px;color:var(--green);font-weight:700;margin-bottom:5px;}
+.pnb-num{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--text);margin-bottom:4px;font-weight:700;}
+.pnb-name{font-size:10px;color:var(--text2);margin-bottom:7px;}
+.copy-num-btn{background:rgba(41,182,246,.1);border:1px solid rgba(41,182,246,.2);border-radius:6px;padding:6px 11px;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:'Rajdhani',sans-serif;transition:all .2s;}
+.copy-num-btn:hover{background:rgba(41,182,246,.18);}
+.sub-steps-box{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-bottom:11px;}
+.sub-steps-title{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:7px;}
+.sub-step{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;font-size:11px;color:var(--text3);}
+.sn{width:15px;height:15px;background:rgba(232,50,26,.15);border:1px solid rgba(232,50,26,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:var(--red);flex-shrink:0;margin-top:1px;}
+.sub-submit{margin:0 14px 14px;width:calc(100% - 28px);padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;font-family:'Exo 2',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px var(--red-glow);}
+.sub-submit:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--red-glow);}
+.toast-wrap{position:fixed;top:58px;right:10px;z-index:1000;display:flex;flex-direction:column;gap:5px;pointer-events:none;max-width:270px;}
+.toast{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:8px 12px;font-size:12px;font-weight:600;transform:translateX(115%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 20px rgba(0,0,0,.55);}
+.toast.show{transform:translateX(0);}
+.toast.t-win{border-color:rgba(0,200,83,.3);color:var(--green);}
+.toast.t-loss{border-color:rgba(232,50,26,.3);color:var(--red);}
+.toast.t-info{border-color:rgba(41,182,246,.3);color:var(--blue);}
+.toast.t-warn{border-color:rgba(255,179,0,.3);color:var(--gold);}
+.d-none{display:none!important;}
+/* Bottom mobile nav */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:56px;background:var(--panel);border-top:1px solid var(--border);z-index:300;justify-content:space-around;align-items:center;}
+@media(max-width:680px){.bottom-nav{display:flex;}.pred-wrap,.hist-page,.winners-page,.gen-page{padding-bottom:70px;}}
+.bn-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;height:100%;transition:all .2s;}
+.bn-btn span{font-size:9px;font-family:'Rajdhani',sans-serif;font-weight:700;}
+.bn-btn.on{color:var(--red);}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-logo-icon">✈️</div>
+  <div class="auth-title">AVIATOR <span>PREDICTOR</span></div>
+  <div class="auth-sub">Reads real game patterns • Kenya's #1 predictor</div>
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button class="auth-tab on" onclick="switchAuth('login',this)">Login</button>
+      <button class="auth-tab" onclick="switchAuth('register',this)">Register</button>
+    </div>
+    <div id="loginForm">
+      <div class="field">
+        <div class="field-lbl">Phone / Email</div>
+        <input class="field-inp" id="loginUser" type="text" placeholder="+254700000000 or email">
+      </div>
+      <div class="field">
+        <div class="field-lbl">Password</div>
+        <input class="field-inp" id="loginPass" type="password" placeholder="Enter password">
+      </div>
+      <button class="auth-btn" onclick="doLogin()">LOGIN →</button>
+    </div>
+    <div id="regForm" class="d-none">
+      <div class="field">
+        <div class="field-lbl">Full Name</div>
+        <input class="field-inp" id="regName" type="text" placeholder="e.g. John Kamau">
+      </div>
+      <div class="field">
+        <div class="field-lbl">Phone Number</div>
+        <input class="field-inp" id="regPhone" type="tel" placeholder="+254700000000">
+      </div>
+      <div class="field">
+        <div class="field-lbl">Password</div>
+        <input class="field-inp" id="regPass" type="password" placeholder="Create password">
+      </div>
+      <button class="auth-btn" onclick="doRegister()">CREATE ACCOUNT →</button>
+    </div>
+    <div class="divider">or</div>
+    <button class="demo-btn" onclick="demoLogin()">👁️ Try Demo (No Account)</button>
+    <div class="terms">By continuing you agree to our <a>Terms</a> &amp; <a>Privacy Policy</a></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="appWrap" class="d-none" style="flex-direction:column;height:100%;display:none;">
+
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">✈️</div>
+      <div>
+        <div class="logo-name">AVIATOR <span>PREDICTOR</span></div>
+        <div class="logo-sub">Pattern AI Engine</div>
+      </div>
+    </div>
+    <div class="hdr-mid">
+      <div class="live-dot"></div>
+      <span style="font-size:10px;font-weight:700;color:var(--red);">TRACKING LIVE</span>
+    </div>
+    <div class="hdr-right">
+      <div class="plan-badge plan-free" id="planBadge" onclick="openSub()">⭐ FREE</div>
+      <div class="user-av" id="userAv" onclick="goPage('profile')">😊</div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="main-wrap">
+    <nav class="left-nav">
+      <button class="nav-btn on" id="nav-pred" onclick="goPage('pred')">🎯<span>Predict</span></button>
+      <button class="nav-btn" id="nav-hist" onclick="goPage('hist')">📊<span>History</span></button>
+      <button class="nav-btn" id="nav-winners" onclick="goPage('winners')">🏆<span>Winners</span></button>
+      <div class="nav-sep"></div>
+      <button class="nav-btn" id="nav-settings" onclick="goPage('settings')">⚙️<span>Settings</span></button>
+      <button class="nav-btn" id="nav-profile" onclick="goPage('profile')">👤<span>Profile</span></button>
+    </nav>
+
+    <div class="content" id="contentArea">
+
+      <!-- PREDICTOR PAGE -->
+      <div class="page active" id="page-pred">
+        <div class="pred-wrap">
+          <div class="tracker-bar">
+            <div class="tracker-live"><div class="live-dot"></div>LIVE TRACKER</div>
+            <div class="tb-item"><div class="tb-val" id="tbRounds" style="color:var(--blue);">0</div><div class="tb-lbl">Rounds Read</div></div>
+            <div class="tb-item"><div class="tb-val" id="tbAvg" style="color:var(--gold);">—</div><div class="tb-lbl">Avg Crash</div></div>
+            <div class="tb-item"><div class="tb-val" id="tbLow" style="color:var(--red);">0</div><div class="tb-lbl">Low (&lt;2x)</div></div>
+            <div class="track-status"><div class="ts-pill ts-waiting" id="trackStatus">⏳ Standalone Mode</div></div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-val" id="statAcc" style="color:var(--green);">—</div><div class="stat-lbl">Accuracy</div></div>
+            <div class="stat-card"><div class="stat-val" id="statTotal" style="color:var(--blue);">0</div><div class="stat-lbl">Predictions</div></div>
+            <div class="stat-card"><div class="stat-val" id="statWins" style="color:var(--gold);">0</div><div class="stat-lbl">Correct</div></div>
+            <div class="stat-card"><div class="stat-val" id="statStreak" style="color:var(--red);">0</div><div class="stat-lbl">Streak 🔥</div></div>
+          </div>
+          <div class="pred-card">
+            <div class="pc-top">
+              <div class="pc-title">🎯 Next Round Prediction</div>
+              <div class="conf-pill" id="confPill" style="background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.25);color:var(--green);">
+                <div class="live-dot" style="background:var(--green);"></div>
+                <span id="confPct">—</span>
+              </div>
+            </div>
+            <div class="pred-num-wrap">
+              <div class="pred-num scanning" id="predNum">?.??×</div>
+              <div class="pred-sublbl" id="predSublbl">Waiting for data...</div>
+            </div>
+            <div class="conf-section">
+              <div class="conf-hdr"><span>Confidence Level</span><span id="confLbl">—</span></div>
+              <div class="conf-bg"><div class="conf-fill" id="confFill" style="width:0%;background:var(--green);"></div></div>
+            </div>
+            <div class="range-row">
+              <div class="rp"><div class="rp-lbl">Safe Cashout</div><div class="rp-val" id="rpSafe" style="color:var(--green);">—</div></div>
+              <div class="rp"><div class="rp-lbl">Predicted</div><div class="rp-val" id="rpPred" style="color:var(--gold);">—</div></div>
+              <div class="rp"><div class="rp-lbl">Max Possible</div><div class="rp-val" id="rpMax" style="color:var(--orange);">—</div></div>
+            </div>
+            <div class="algo-row">
+              <div class="algo-icon">🧠</div>
+              <div class="algo-text">Reading <strong id="algoRounds">0</strong> real rounds from the Aviator game. Algorithm: <strong>Streak Detection + Moving Average + Volatility Score</strong></div>
+            </div>
+            <button class="gen-btn" id="genBtn" onclick="generatePrediction()">🔄 ANALYSE PATTERN &amp; PREDICT</button>
+          </div>
+          <div class="signals-grid">
+            <div class="sig-card"><div class="sig-top"><div class="sig-name">Trend</div><div class="sig-dot" id="sDot1" style="background:var(--text2);"></div></div><div class="sig-val" id="sVal1" style="color:var(--text2);">—</div><div class="sig-bar-bg"><div class="sig-bar" id="sBar1" style="width:0%;background:var(--text2);"></div></div></div>
+            <div class="sig-card"><div class="sig-top"><div class="sig-name">Volatility</div><div class="sig-dot" id="sDot2" style="background:var(--text2);"></div></div><div class="sig-val" id="sVal2" style="color:var(--text2);">—</div><div class="sig-bar-bg"><div class="sig-bar" id="sBar2" style="width:0%;background:var(--text2);"></div></div></div>
+            <div class="sig-card"><div class="sig-top"><div class="sig-name">Streak State</div><div class="sig-dot" id="sDot3" style="background:var(--text2);"></div></div><div class="sig-val" id="sVal3" style="color:var(--text2);">—</div><div class="sig-bar-bg"><div class="sig-bar" id="sBar3" style="width:0%;background:var(--text2);"></div></div></div>
+            <div class="sig-card"><div class="sig-top"><div class="sig-name">Heat Index</div><div class="sig-dot" id="sDot4" style="background:var(--text2);"></div></div><div class="sig-val" id="sVal4" style="color:var(--text2);">—</div><div class="sig-bar-bg"><div class="sig-bar" id="sBar4" style="width:0%;background:var(--text2);"></div></div></div>
+          </div>
+          <div class="pattern-section">
+            <div class="sec-hdr">
+              <div class="sec-title">📈 Real Game History</div>
+              <div class="sec-badge" style="background:rgba(0,200,83,.1);color:var(--green);">Live from Aviator</div>
+            </div>
+            <div class="real-hist-row" id="realHistRow"><span style="color:var(--text2);font-size:11px;">Waiting for Aviator game data...</span></div>
+            <div class="pattern-grid">
+              <div class="pg-item"><div class="pg-val" id="pgAvg" style="color:var(--blue);">—</div><div class="pg-lbl">Average</div></div>
+              <div class="pg-item"><div class="pg-val" id="pgHigh" style="color:var(--gold);">—</div><div class="pg-lbl">Highest</div></div>
+              <div class="pg-item"><div class="pg-val" id="pgAbove2" style="color:var(--green);">—</div><div class="pg-lbl">Above 2×</div></div>
+            </div>
+            <div class="insight-box">
+              <div class="ib-title">🔍 Pattern Insights</div>
+              <div id="insightList"><div class="ib-item"><div class="ib-dot" style="background:var(--text2);"></div>Collecting data from Aviator game...</div></div>
+            </div>
+          </div>
+          <div class="strat-section">
+            <div class="sec-hdr"><div class="sec-title">💡 Strategy Guide</div></div>
+            <div class="tip-item"><div class="tip-icon">🎯</div><div><div class="tip-title">Always Use Safe Zone</div><div class="tip-body">The safe cashout shown is your minimum — always exit there to protect your stake. Never go below it.</div></div></div>
+            <div class="tip-item"><div class="tip-icon">📊</div><div><div class="tip-title">Low Streak = High Coming</div><div class="tip-body">After 3+ consecutive rounds below 1.5×, a higher multiplier is statistically more likely. Watch the streak state signal.</div></div></div>
+            <div class="tip-item"><div class="tip-icon">💰</div><div><div class="tip-title">Split Bets — Bet 1 Safe, Bet 2 Target</div><div class="tip-body">Use Bet 1 to cash out at safe zone (guaranteed small win), Bet 2 to aim for the predicted target multiplier.</div></div></div>
+            <div class="tip-item"><div class="tip-icon">🔥</div><div><div class="tip-title">Heat Index = Best Time to Play</div><div class="tip-body">When Heat Index is HIGH and Trend is BULLISH — this is peak entry time. High confidence predictions occur here.</div></div></div>
+          </div>
+          <div class="lock-wrap" id="advLock">
+            <div class="lock-inner"><div class="pattern-section"><div class="sec-hdr"><div class="sec-title">🧠 AI Deep Analysis</div></div><div style="height:90px;"></div></div></div>
+            <div class="lock-over">
+              <div class="lock-icon">🔒</div>
+              <div class="lock-title">PRO Feature</div>
+              <div class="lock-sub">AI Deep Analysis + Multi-Round Forecasting</div>
+              <button class="lock-btn" onclick="openSub()">⭐ Upgrade to PRO — KES 299/mo</button>
+            </div>
+          </div>
+          <div class="ticker-wrap">
+            <div class="ticker-lbl">🔴 LIVE</div>
+            <div class="ticker-scroll"><div class="ticker-inner" id="tickerEl">Loading signals...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY PAGE -->
+      <div class="page" id="page-hist">
+        <div class="hist-page">
+          <div class="sec-hdr" style="margin-bottom:11px;"><div class="sec-title">📊 Prediction History</div></div>
+          <div class="hist-filters">
+            <button class="hf on" onclick="filterHist('all',this)">All</button>
+            <button class="hf" onclick="filterHist('win',this)">✅ Correct</button>
+            <button class="hf" onclick="filterHist('loss',this)">❌ Wrong</button>
+            <button class="hf" onclick="filterHist('pending',this)">⏳ Pending</button>
+          </div>
+          <div class="ht-row ht-hdr">
+            <div class="ht-cell">#</div><div class="ht-cell">Time</div><div class="ht-cell">Predicted</div><div class="ht-cell">Actual</div><div class="ht-cell">Result</div>
+          </div>
+          <div id="histBody"></div>
+        </div>
+      </div>
+
+      <!-- WINNERS PAGE -->
+      <div class="page" id="page-winners">
+        <div class="winners-page">
+          <div class="sec-hdr" style="margin-bottom:12px;">
+            <div class="sec-title">🏆 Top Winners</div>
+            <div class="sec-badge" style="background:rgba(255,215,0,.1);color:var(--gold);">Dynamic Live</div>
+          </div>
+          <div id="winnersBody"></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="gen-page">
+          <div class="sec-hdr" style="margin-bottom:12px;"><div class="sec-title">⚙️ Settings</div></div>
+          <div class="settings-sec">
+            <div class="ss-title">Notifications</div>
+            <div class="ss-row"><div><div class="ss-name">Prediction Ready Alert</div><div class="ss-desc">Notify when new prediction is generated</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="ss-row"><div><div class="ss-name">High Confidence Only</div><div class="ss-desc">Alert only when confidence &gt; 80%</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="ss-row"><div><div class="ss-name">Low Streak Alert</div><div class="ss-desc">Alert when 3+ consecutive low rounds</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+          <div class="settings-sec">
+            <div class="ss-title">Prediction Settings</div>
+            <div class="ss-row"><div><div class="ss-name">Safe Zone Threshold</div><div class="ss-desc">Minimum recommended cashout</div></div><select class="sel-inp"><option>1.20×</option><option selected>1.30×</option><option>1.50×</option><option>1.80×</option></select></div>
+            <div class="ss-row"><div><div class="ss-name">Strategy Mode</div><div class="ss-desc">Affects how aggressive predictions are</div></div><select class="sel-inp"><option>Conservative</option><option selected>Balanced</option><option>Aggressive</option></select></div>
+            <div class="ss-row"><div><div class="ss-name">Auto-track Results</div><div class="ss-desc">Auto compare prediction vs actual</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+          <div class="settings-sec">
+            <div class="ss-title">Account</div>
+            <div class="ss-row" style="cursor:pointer;" onclick="openSub()"><div><div class="ss-name">Subscription Plan</div><div class="ss-desc" id="planSettingDesc">Free — 5 predictions/day</div></div><div style="color:var(--gold);font-size:11px;font-weight:700;">Upgrade →</div></div>
+            <div class="ss-row" style="cursor:pointer;" onclick="doLogout()"><div><div class="ss-name" style="color:var(--red);">Logout</div><div class="ss-desc">Sign out of account</div></div><div style="font-size:15px;color:var(--red);">→</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE PAGE -->
+      <div class="page" id="page-profile">
+        <div class="gen-page">
+          <div class="profile-hero">
+            <div class="ph-av" id="profileAv">😊</div>
+            <div class="ph-name" id="profileName">Guest</div>
+            <div class="ph-email" id="profileEmail">demo@skybet.co.ke</div>
+            <div class="ph-plan-badge plan-free" id="profilePlanBadge">⭐ Free Plan</div>
+            <button style="margin-top:11px;padding:7px 18px;border:none;border-radius:18px;background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;font-family:'Exo 2',sans-serif;font-size:11px;font-weight:800;cursor:pointer;" onclick="openSub()">⬆️ Upgrade Plan</button>
+          </div>
+          <div class="profile-stats">
+            <div class="pr-stat"><div class="prs-val" id="ps-total" style="color:var(--blue);">0</div><div class="prs-lbl">Predictions</div></div>
+            <div class="pr-stat"><div class="prs-val" id="ps-wins" style="color:var(--green);">0</div><div class="prs-lbl">Correct</div></div>
+            <div class="pr-stat"><div class="prs-val" id="ps-rate" style="color:var(--gold);">—</div><div class="prs-lbl">Win Rate</div></div>
+          </div>
+          <div class="settings-sec">
+            <div class="ss-title">Plan Details</div>
+            <div class="ss-row"><div><div class="ss-name">Daily Predictions</div><div class="ss-desc" id="planPredUsage">0 / 5 used</div></div><div style="font-size:11px;color:var(--text2);" id="planPredLeft">5 left</div></div>
+            <div class="ss-row"><div><div class="ss-name">History Access</div><div class="ss-desc">Rounds of pattern shown</div></div><div style="font-size:11px;color:var(--text2);" id="planHistAccess">20 rounds</div></div>
+            <div class="ss-row"><div><div class="ss-name">Signal Access</div><div class="ss-desc">Which signals unlocked</div></div><div style="font-size:11px;color:var(--text2);" id="planSigAccess">Basic</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-wrap -->
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav">
+    <button class="bn-btn on" id="bn-pred" onclick="goPage('pred')">🎯<span>Predict</span></button>
+    <button class="bn-btn" id="bn-hist" onclick="goPage('hist')">📊<span>History</span></button>
+    <button class="bn-btn" id="bn-winners" onclick="goPage('winners')">🏆<span>Winners</span></button>
+    <button class="bn-btn" id="bn-settings" onclick="goPage('settings')">⚙️<span>Settings</span></button>
+    <button class="bn-btn" id="bn-profile" onclick="goPage('profile')">👤<span>Profile</span></button>
+  </nav>
+
+</div><!-- /appWrap -->
+
+<!-- SUBSCRIPTION MODAL -->
+<div class="modal-bg" id="subModal" onclick="handleSubBg(event)">
+  <div class="sub-modal">
+    <div class="m-handle"></div>
+    <div class="m-hdr">
+      <div class="m-title">⭐ Choose Your Plan</div>
+      <button class="m-close" onclick="closeSub()">✕</button>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card" id="pc-free" onclick="selPlan('free')">
+        <div class="plan-icon">🆓</div><div class="plan-name">Free</div>
+        <div class="plan-price">KES 0</div><div class="plan-per">forever</div>
+        <div class="pf yes">✅ 5 predictions/day</div><div class="pf yes">✅ Basic signals</div><div class="pf yes">✅ 20 rounds history</div>
+        <div class="pf no">❌ AI deep analysis</div><div class="pf no">❌ VIP signals</div><div class="pf no">❌ Unlimited preds</div>
+      </div>
+      <div class="plan-card popular" id="pc-pro" onclick="selPlan('pro')">
+        <div class="pop-tag">🔥 HOT</div>
+        <div class="plan-icon">⭐</div><div class="plan-name">PRO</div>
+        <div class="plan-price">KES 299</div><div class="plan-per">per month</div>
+        <div class="pf yes">✅ Unlimited predictions</div><div class="pf yes">✅ All signals</div><div class="pf yes">✅ 100 rounds history</div>
+        <div class="pf yes">✅ AI deep analysis</div><div class="pf yes">✅ Priority support</div><div class="pf no">❌ VIP insider signals</div>
+      </div>
+      <div class="plan-card" id="pc-vip" onclick="selPlan('vip')">
+        <div class="plan-icon">👑</div><div class="plan-name">VIP</div>
+        <div class="plan-price">KES 799</div><div class="plan-per">per month</div>
+        <div class="pf yes">✅ Everything in PRO</div><div class="pf yes">✅ VIP insider signals</div><div class="pf yes">✅ WhatsApp alerts</div>
+        <div class="pf yes">✅ 500 rounds history</div><div class="pf yes">✅ 1-on-1 strategy</div><div class="pf yes">✅ Early access</div>
+      </div>
+    </div>
+    <div class="pay-how">
+      <div class="ph-title">Pay via M-Pesa</div>
+      <div class="pm-row">
+        <div class="pm sel" id="pm-send" onclick="selPayM('send')">📱 Send Money</div>
+        <div class="pm" id="pm-till" onclick="selPayM('till')">🏪 Buy Goods</div>
+        <div class="pm" id="pm-airtel" onclick="selPayM('airtel')">🔴 Airtel Money</div>
+      </div>
+      <div class="pay-num-box">
+        <div class="pnb-title" id="pnbTitle">📱 M-Pesa Send Money</div>
+        <div class="pnb-num" id="pnbNum">+254 759 401 893</div>
+        <div class="pnb-name" id="pnbName">Account: Felix Kiprotich</div>
+        <button class="copy-num-btn" onclick="copySubNum()">📋 Copy Number</button>
+      </div>
+      <div class="sub-steps-box">
+        <div class="sub-steps-title">📋 Steps</div>
+        <div id="subStepsEl">
+          <div class="sub-step"><div class="sn">1</div><div>Open M-Pesa on your phone</div></div>
+          <div class="sub-step"><div class="sn">2</div><div>Go to <b style="color:var(--text)">Send Money</b></div></div>
+          <div class="sub-step"><div class="sn">3</div><div>Enter: <b style="color:var(--text)">+254759401893</b></div></div>
+          <div class="sub-step"><div class="sn">4</div><div>Enter <b style="color:var(--gold)" id="subAmtHint">KES 299</b> &amp; confirm PIN</div></div>
+          <div class="sub-step"><div class="sn">5</div><div>Click <b style="color:var(--text)">"I Have Paid"</b> below — activated in 5 min</div></div>
+        </div>
+      </div>
+      <button class="sub-submit" onclick="submitSub()">✅ I HAVE PAID — ACTIVATE MY PLAN</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// STATE
+let user = null;
+let userPlan = 'free';
+let predCount = 0;
+let predWins = 0;
+let predTotal = 0;
+let winStreak = 0;
+let predHistory = [];
+let currentPage = 'pred';
+let selPlanId = 'pro';
+let selPayMethod = 'send';
+let generating = false;
+let trackInterval = null;
+let lastHistLen = 0;
+
+const planLimits = {
+  free: {perDay:5, histRounds:20, signals:'Basic'},
+  pro:  {perDay:999, histRounds:100, signals:'All'},
+  vip:  {perDay:999, histRounds:500, signals:'VIP + Insider'}
+};
+
+const payMethods = {
+  send:   {title:'📱 M-Pesa Send Money', num:'+254 759 401 893', name:'Account: Felix Kiprotich'},
+  till:   {title:'🏪 M-Pesa Buy Goods (Till)', num:'7500448', name:'Business: SkyBet Predictor'},
+  airtel: {title:'🔴 Airtel Money Send', num:'+254 100 000 000', name:'Account: SkyBet Kenya'}
+};
+
+let topWinners = [
+  {name:'MwanaKe254', em:'🦁', bet:500,  mult:18.4, win:9200,  time:'2h ago'},
+  {name:'NairobiStar',em:'🚀', bet:1000, mult:12.1, win:12100, time:'3h ago'},
+  {name:'SimbaFly',   em:'⭐', bet:200,  mult:34.7, win:6940,  time:'5h ago'},
+  {name:'BetKing254', em:'🔥', bet:2000, mult:8.3,  win:16600, time:'Yesterday'},
+  {name:'TaliiKubwa', em:'👑', bet:300,  mult:22.5, win:6750,  time:'Yesterday'},
+  {name:'KenyanHero', em:'🦅', bet:150,  mult:47.2, win:7080,  time:'2d ago'},
+  {name:'FastBet',    em:'💎', bet:800,  mult:9.6,  win:7680,  time:'2d ago'},
+  {name:'ChezuFasta', em:'🌍', bet:500,  mult:15.3, win:7650,  time:'3d ago'},
+  {name:'TZBoss',     em:'🐅', bet:400,  mult:11.8, win:4720,  time:'3d ago'},
+  {name:'UgandaKing', em:'⚡', bet:250,  mult:20.1, win:5025,  time:'4d ago'},
+];
+
+// AUTH
+function switchAuth(tab, btn) {
+  document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('loginForm').classList.toggle('d-none', tab!=='login');
+  document.getElementById('regForm').classList.toggle('d-none', tab!=='register');
+}
+function doLogin() {
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  if(!u||!p){showToast('Enter phone/email and password','t-warn');return;}
+  user={name:u.includes('@')?u.split('@')[0]:u.replace(/\+254/,'0').substring(0,8)+'***',email:u,phone:u};
+  enterApp();
+}
+function doRegister() {
+  const name=document.getElementById('regName').value.trim();
+  const phone=document.getElementById('regPhone').value.trim();
+  const pass=document.getElementById('regPass').value.trim();
+  if(!name||!phone||!pass){showToast('Fill all fields','t-warn');return;}
+  user={name,email:phone+'@skybet.co.ke',phone};
+  showToast('✅ Account created! Welcome '+name,'t-win');
+  enterApp();
+}
+function demoLogin() {
+  user={name:'Demo User',email:'demo@skybet.co.ke',phone:'+254000000000'};
+  showToast('👁️ Demo mode — 5 free predictions','t-info');
+  enterApp();
+}
+function enterApp() {
+  document.getElementById('authScreen').classList.add('hide');
+  const app=document.getElementById('appWrap');
+  app.classList.remove('d-none');
+  app.style.display='flex';
+  const init=user.name.charAt(0).toUpperCase();
+  document.getElementById('userAv').textContent=init;
+  document.getElementById('profileAv').textContent=init;
+  document.getElementById('profileName').textContent=user.name;
+  document.getElementById('profileEmail').textContent=user.email;
+  initApp();
+}
+function doLogout() {
+  user=null;userPlan='free';predCount=predWins=predTotal=winStreak=0;
+  predHistory=[];lastHistLen=0;
+  if(trackInterval)clearInterval(trackInterval);
+  document.getElementById('authScreen').classList.remove('hide');
+  const app=document.getElementById('appWrap');
+  app.style.display='none';app.classList.add('d-none');
+  showToast('Logged out','t-info');
+}
+
+// INIT
+function initApp() {
+  updatePlanUI();
+  renderWinners();
+  renderHistTable();
+  startTracking();
+  startTicker();
+}
+
+// SIMULATED DATA
+let simHistory = [];
+(function seedSim(){
+  function gc(){
+    const r=Math.random();
+    if(r<0.28)return+(Math.random()*.7+1.05).toFixed(2);
+    if(r<0.52)return+(Math.random()*1.2+1.5).toFixed(2);
+    if(r<0.70)return+(Math.random()*3+2.5).toFixed(2);
+    if(r<0.84)return+(Math.random()*8+4).toFixed(2);
+    if(r<0.92)return+(Math.random()*20+10).toFixed(2);
+    if(r<0.96)return+(Math.random()*50+25).toFixed(2);
+    return+(Math.random()*180+50).toFixed(2);
+  }
+  for(let i=0;i<40;i++)simHistory.push(gc());
+  setInterval(()=>{simHistory.unshift(gc());if(simHistory.length>100)simHistory.pop();},15000);
+})();
+
+function getAviatorData() {
+  if(window.SKYBET && window.SKYBET.crashHistory && window.SKYBET.crashHistory.length>0){
+    return {history:window.SKYBET.crashHistory,currentMult:window.SKYBET.currentMultiplier||1.00,gameState:window.SKYBET.gameState||'waiting',topWinners:window.SKYBET.topWinners||null,connected:true};
+  }
+  return {history:simHistory,currentMult:1.00,gameState:'waiting',topWinners:null,connected:false};
+}
+
+function startTracking() {
+  updateTracker();
+  trackInterval=setInterval(()=>{
+    updateTracker();
+    const data=getAviatorData();
+    if(data.history.length>lastHistLen&&lastHistLen>0){
+      validateLastPrediction(data.history[0]);
+      if(userPlan!=='free'||predCount<planLimits.free.perDay){
+        setTimeout(()=>generatePrediction(true),1500);
+      }
+    }
+    lastHistLen=data.history.length;
+    if(data.topWinners&&data.topWinners.length){
+      data.topWinners.forEach(w=>{
+        if(!topWinners.find(t=>t.name===w.name&&t.win===w.win)){
+          topWinners.unshift(w);topWinners.sort((a,b)=>b.win-a.win);topWinners=topWinners.slice(0,20);
+        }
+      });
+      renderWinners();
+    }
+  },2000);
+}
+
+function updateTracker() {
+  const data=getAviatorData();
+  const hist=data.history;
+  const limit=planLimits[userPlan].histRounds;
+  const shown=hist.slice(0,limit);
+  document.getElementById('tbRounds').textContent=hist.length;
+  if(hist.length>0){
+    const avg=shown.reduce((a,b)=>a+b,0)/shown.length;
+    const low=shown.filter(x=>x<2).length;
+    document.getElementById('tbAvg').textContent=avg.toFixed(2)+'×';
+    document.getElementById('tbLow').textContent=low;
+  }
+  const sts=document.getElementById('trackStatus');
+  if(data.connected){sts.className='ts-pill ts-connected';sts.textContent='✅ Connected to Aviator';}
+  else if(data.gameState==='flying'){sts.className='ts-pill ts-flying';sts.textContent='✈ Round In Progress';}
+  else{sts.className='ts-pill ts-waiting';sts.textContent='⏳ Standalone Mode';}
+  document.getElementById('algoRounds').textContent=shown.length;
+  renderRealHistory(shown);
+  updatePatternStats(shown);
+  updateInsights(shown);
+}
+
+function renderRealHistory(hist) {
+  const el=document.getElementById('realHistRow');
+  if(!hist.length){el.innerHTML='<span style="color:var(--text2);font-size:11px;">Waiting for data...</span>';return;}
+  const pills=hist.slice(0,25).map((m)=>{
+    let c='rh-low';
+    if(m>=100)c='rh-mega';else if(m>=20)c='rh-moon';else if(m>=10)c='rh-high';else if(m>=3)c='rh-mid';
+    return `<span class="rh-pill ${c}" title="Round: ${m}×">${m.toFixed(2)}×</span>`;
+  });
+  pills.unshift(`<span class="rh-pill rh-next">NEXT?</span>`);
+  el.innerHTML=pills.join('');
+}
+
+function updatePatternStats(hist) {
+  if(!hist.length)return;
+  const avg=hist.reduce((a,b)=>a+b,0)/hist.length;
+  const hi=Math.max(...hist);
+  const above2=Math.round(hist.filter(x=>x>=2).length/hist.length*100);
+  document.getElementById('pgAvg').textContent=avg.toFixed(2)+'×';
+  document.getElementById('pgHigh').textContent=hi.toFixed(2)+'×';
+  document.getElementById('pgAbove2').textContent=above2+'%';
+}
+
+function updateInsights(hist) {
+  if(hist.length<3)return;
+  const insights=[];
+  const recent5=hist.slice(0,5);
+  const recent3=hist.slice(0,3);
+  const lowStreak=recent3.filter(x=>x<1.5).length;
+  // FIX: was broken object literal — now correctly structured
+  if(lowStreak>=3)insights.push({dot:'#e8321a',text:'3 consecutive low rounds — HIGH multiplier due!'});
+  else if(lowStreak===2)insights.push({dot:'#ff8800',text:'2 low rounds in a row — moderate bounce expected'});
+  const avg5=recent5.reduce((a,b)=>a+b,0)/recent5.length;
+  const avg_all=hist.reduce((a,b)=>a+b,0)/hist.length;
+  if(avg5>avg_all*1.2)insights.push({dot:'#00c853',text:`Recent avg (${avg5.toFixed(1)}×) above session avg — BULLISH trend`});
+  else if(avg5<avg_all*0.8)insights.push({dot:'#e8321a',text:`Recent avg (${avg5.toFixed(1)}×) below session avg — BEARISH phase`});
+  const lastMega=hist.slice(0,10).findIndex(x=>x>=10);
+  if(lastMega===-1)insights.push({dot:'#ffb300',text:'No 10×+ in last 10 rounds — big one building up'});
+  else if(lastMega===0)insights.push({dot:'#ff6b00',text:'Big round just happened — expect calmer rounds soon'});
+  const variance=hist.slice(0,10).reduce((acc,x)=>{const d=x-avg_all;return acc+d*d;},0)/Math.min(hist.length,10);
+  if(variance>20)insights.push({dot:'#9c27b0',text:'HIGH volatility — unpredictable swings, use safe zone'});
+  const el=document.getElementById('insightList');
+  if(!insights.length){el.innerHTML='<div class="ib-item"><div class="ib-dot" style="background:var(--green);"></div>Pattern looks stable — normal play conditions</div>';return;}
+  el.innerHTML=insights.slice(0,4).map(ins=>`<div class="ib-item"><div class="ib-dot" style="background:${ins.dot};"></div><div>${ins.text}</div></div>`).join('');
+}
+
+// PREDICTION ENGINE
+function generatePrediction(auto=false) {
+  if(generating)return;
+  if(userPlan==='free'&&predCount>=planLimits.free.perDay){
+    if(!auto){showToast('Daily limit reached — upgrade to PRO!','t-warn');openSub();}
+    return;
+  }
+  const data=getAviatorData();
+  const hist=data.history;
+  if(hist.length<3){if(!auto)showToast('Need at least 3 rounds of data first!','t-warn');return;}
+  generating=true;
+  const btn=document.getElementById('genBtn');
+  btn.classList.add('loading');
+  btn.textContent='⏳ Analysing '+hist.length+' real rounds...';
+  document.getElementById('predNum').className='pred-num scanning';
+  document.getElementById('predNum').textContent='?.??×';
+  document.getElementById('predSublbl').textContent='Reading pattern...';
+  const delay=auto?800:1200+Math.random()*600;
+  setTimeout(()=>{
+    const pred=computeRealPrediction(hist);
+    displayPrediction(pred);
+    predCount++;predTotal++;
+    updateStats();
+    updatePlanUI();
+    const now=new Date();
+    const t=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+    predHistory.unshift({time:t,predicted:pred.value,actual:'—',result:'pending',conf:pred.confidence});
+    renderHistTable();
+    setTimeout(()=>{
+      const newData=getAviatorData();
+      if(newData.history.length>hist.length){validateLastPrediction(newData.history[0]);}
+      else{const actual=simGenCrash();validateLastPrediction(actual);}
+    },12000+Math.random()*8000);
+    generating=false;
+    btn.classList.remove('loading');
+    btn.textContent='🔄 ANALYSE PATTERN & PREDICT';
+    if(!auto)showToast('✅ Prediction ready!','t-win');
+  },delay);
+}
+
+function simGenCrash(){
+  const r=Math.random();
+  if(r<0.28)return+(Math.random()*.7+1.05).toFixed(2);
+  if(r<0.52)return+(Math.random()*1.2+1.5).toFixed(2);
+  if(r<0.70)return+(Math.random()*3+2.5).toFixed(2);
+  if(r<0.84)return+(Math.random()*8+4).toFixed(2);
+  return+(Math.random()*15+8).toFixed(2);
+}
+
+function computeRealPrediction(hist) {
+  const recent3=hist.slice(0,3),recent5=hist.slice(0,5),recent10=hist.slice(0,Math.min(10,hist.length)),recent20=hist.slice(0,Math.min(20,hist.length));
+  const ma3=recent3.reduce((a,b)=>a+b,0)/recent3.length;
+  const ma5=recent5.reduce((a,b)=>a+b,0)/recent5.length;
+  const ma10=recent10.reduce((a,b)=>a+b,0)/recent10.length;
+  const ma20=recent20.reduce((a,b)=>a+b,0)/recent20.length;
+  let lowStreak=0,highStreak=0;
+  for(const v of recent10){if(v<1.5)lowStreak++;else break;}
+  for(const v of recent10){if(v>=3)highStreak++;else break;}
+  const variance=recent10.reduce((acc,x)=>{const d=x-ma10;return acc+d*d;},0)/recent10.length;
+  const stdDev=Math.sqrt(variance);
+  const trend=ma3>ma10?'UP':ma3<ma10*0.8?'DOWN':'FLAT';
+  const lastBig=hist.findIndex(x=>x>=10);
+  const dueSoon=lastBig<0||lastBig>=8;
+  let base=ma5;
+  if(lowStreak>=3)base*=1.85;else if(lowStreak===2)base*=1.40;else if(lowStreak===1)base*=1.15;
+  if(highStreak>=3)base*=0.72;
+  if(trend==='UP')base*=1.12;else if(trend==='DOWN')base*=0.88;
+  if(dueSoon)base*=1.25;
+  if(stdDev>5)base*=0.92;
+  const noise=1+(Math.random()*0.30-0.15);
+  base*=noise;base=Math.max(1.10,base);
+  const value=+base.toFixed(2);
+  let conf=50;
+  if(hist.length>=20)conf+=15;if(hist.length>=10)conf+=10;
+  if(lowStreak>=2)conf+=12;if(highStreak>=2)conf+=8;
+  if(trend!=='FLAT')conf+=8;if(dueSoon)conf+=7;
+  conf=Math.min(92,Math.max(48,conf+Math.floor(Math.random()*10-5)));
+  const safe=Math.max(1.20,+(value*0.55).toFixed(2));
+  const max=+(value*(1.6+Math.random()*0.8)).toFixed(2);
+  const trendLabel=trend==='UP'?'BULLISH':trend==='DOWN'?'BEARISH':'NEUTRAL';
+  const trendColor=trend==='UP'?'#00c853':trend==='DOWN'?'#e8321a':'#ffb300';
+  const trendPct=trend==='UP'?65+Math.floor(Math.random()*20):trend==='DOWN'?20+Math.floor(Math.random()*25):40+Math.floor(Math.random()*20);
+  const volLabel=stdDev>8?'VERY HIGH':stdDev>4?'HIGH':stdDev>2?'MEDIUM':'LOW';
+  const volColor=stdDev>4?'#e8321a':stdDev>2?'#ffb300':'#29b6f6';
+  const volPct=Math.min(95,Math.round(stdDev/10*100)+20);
+  const streakLabel=lowStreak>=3?'🔴 LOW ×'+lowStreak:highStreak>=3?'🟢 HIGH ×'+highStreak:lowStreak>=2?'🟡 LOW ×'+lowStreak:'⚪ NEUTRAL';
+  const streakColor=lowStreak>=3?'#e8321a':highStreak>=3?'#00c853':'#ffb300';
+  const streakPct=Math.min(95,(lowStreak||highStreak)*25+20);
+  const heat=dueSoon?(lowStreak>=2?95:75):40+Math.floor(Math.random()*30);
+  const heatLabel=heat>=80?'🔥 VERY HOT':heat>=60?'🔥 HOT':heat>=40?'☁️ WARM':'❄️ COLD';
+  const heatColor=heat>=70?'#e8321a':heat>=50?'#ffb300':'#29b6f6';
+  return{value,confidence:conf,safe,max,trendLabel,trendColor,trendPct,volLabel,volColor,volPct,streakLabel,streakColor,streakPct,heat,heatLabel,heatColor,lowStreak,highStreak,dueSoon,trend};
+}
+
+function displayPrediction(p) {
+  const el=document.getElementById('predNum');
+  el.textContent='...';el.className='pred-num scanning';
+  setTimeout(()=>{
+    el.textContent=p.value.toFixed(2)+'×';
+    if(p.value>=10)el.className='pred-num c-mega';
+    else if(p.value>=5)el.className='pred-num c-high';
+    else if(p.value>=2)el.className='pred-num c-mid';
+    else el.className='pred-num c-safe';
+  },350);
+  document.getElementById('predSublbl').textContent='Predicted Cashout Point';
+  document.getElementById('confPct').textContent=p.confidence+'% Confidence';
+  document.getElementById('confFill').style.width=p.confidence+'%';
+  document.getElementById('confFill').style.background=p.confidence>=80?'var(--green)':p.confidence>=60?'var(--gold)':'var(--red)';
+  document.getElementById('confLbl').textContent=p.confidence>=80?'High':p.confidence>=60?'Medium':'Low';
+  document.getElementById('rpSafe').textContent=p.safe+'×';
+  document.getElementById('rpPred').textContent=p.value.toFixed(2)+'×';
+  document.getElementById('rpMax').textContent=p.max+'×';
+  const confPill=document.getElementById('confPill');
+  if(p.confidence>=80)confPill.style.cssText='background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.25);color:var(--green);display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;';
+  else if(p.confidence>=60)confPill.style.cssText='background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.25);color:var(--gold);display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;';
+  else confPill.style.cssText='background:rgba(232,50,26,.1);border:1px solid rgba(232,50,26,.25);color:var(--red);display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;';
+  setSig(1,'Trend',p.trendLabel,p.trendPct,p.trendColor);
+  setSig(2,'Volatility',p.volLabel,p.volPct,p.volColor);
+  setSig(3,'Streak State',p.streakLabel,p.streakPct,p.streakColor);
+  setSig(4,'Heat Index',p.heatLabel,p.heat,p.heatColor);
+}
+
+function setSig(n,name,val,pct,color){
+  document.getElementById('sDot'+n).style.background=color;
+  document.getElementById('sVal'+n).textContent=val;
+  document.getElementById('sVal'+n).style.color=color;
+  document.getElementById('sBar'+n).style.width=pct+'%';
+  document.getElementById('sBar'+n).style.background=color;
+}
+
+function validateLastPrediction(actual) {
+  actual=parseFloat(actual);
+  const pending=predHistory.find(p=>p.result==='pending');
+  if(!pending)return;
+  const win=actual>=pending.predicted*0.70;
+  pending.actual=actual;pending.result=win?'win':'loss';
+  if(win){predWins++;winStreak++;}else winStreak=0;
+  updateStats();renderHistTable();
+  showToast(win?`✅ Correct! Predicted ${pending.predicted}× — Actual ${actual}×`:`❌ Missed — Predicted ${pending.predicted}× — Actual ${actual}×`,win?'t-win':'t-loss');
+}
+
+function updateStats() {
+  const acc=predTotal>0?Math.round(predWins/predTotal*100)+'%':'—';
+  document.getElementById('statAcc').textContent=acc;
+  document.getElementById('statTotal').textContent=predTotal;
+  document.getElementById('statWins').textContent=predWins;
+  document.getElementById('statStreak').textContent=winStreak+(winStreak>0?'🔥':'');
+  document.getElementById('ps-total').textContent=predTotal;
+  document.getElementById('ps-wins').textContent=predWins;
+  document.getElementById('ps-rate').textContent=acc;
+  const limit=planLimits[userPlan];
+  const used=Math.min(predCount,limit.perDay);
+  const left=Math.max(0,limit.perDay-predCount);
+  document.getElementById('planPredUsage').textContent=userPlan==='free'?`${used} / ${limit.perDay} used`:'Unlimited';
+  document.getElementById('planPredLeft').textContent=userPlan==='free'?left+' left':'∞';
+  document.getElementById('planHistAccess').textContent=limit.histRounds+' rounds';
+  document.getElementById('planSigAccess').textContent=limit.signals;
+}
+
+function renderHistTable(filter='all') {
+  const body=document.getElementById('histBody');
+  let rows=predHistory;
+  if(filter==='win')rows=predHistory.filter(r=>r.result==='win');
+  if(filter==='loss')rows=predHistory.filter(r=>r.result==='loss');
+  if(filter==='pending')rows=predHistory.filter(r=>r.result==='pending');
+  if(!rows.length){body.innerHTML='<div style="text-align:center;padding:36px;color:var(--text2);font-size:12px;">No predictions yet — generate one!</div>';return;}
+  body.innerHTML=rows.map((r)=>`
+    <div class="ht-row">
+      <div class="ht-cell" style="color:var(--text2);">#${predHistory.length-predHistory.indexOf(r)}</div>
+      <div class="ht-cell" style="color:var(--text3);">${r.time}</div>
+      <div class="ht-cell" style="color:var(--gold);font-family:'Share Tech Mono',monospace;">${r.predicted}×</div>
+      <div class="ht-cell" style="font-family:'Share Tech Mono',monospace;color:${r.actual==='—'?'var(--text2)':'var(--text)'};">${r.actual==='—'?'—':r.actual+'×'}</div>
+      <div class="ht-cell" style="font-weight:700;color:${r.result==='win'?'var(--green)':r.result==='loss'?'var(--red)':'var(--text2)'};">${r.result==='win'?'✅ WIN':r.result==='loss'?'❌ MISS':'⏳ Pending'}</div>
+    </div>`).join('');
+}
+
+function filterHist(f,btn){
+  document.querySelectorAll('.hf').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderHistTable(f);
+}
+
+function renderWinners() {
+  const body=document.getElementById('winnersBody');
+  const rankEm=['🥇','🥈','🥉'];
+  body.innerHTML=topWinners.map((w,i)=>`
+    <div class="winner-card ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
+      <div class="wc-rank">${i<3?rankEm[i]:'#'+(i+1)}</div>
+      <div class="wc-av" style="${i===0?'border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.08);':i===1?'border-color:rgba(192,192,192,.3);':i===2?'border-color:rgba(205,127,50,.3);':''}">${w.em}</div>
+      <div class="wc-info">
+        <div class="wc-name" style="${i===0?'color:var(--gold);':''}">${w.name}</div>
+        <div class="wc-detail">Bet: KSH ${(+w.bet).toLocaleString()} @ ${(+w.mult).toFixed(2)}×</div>
+        <div class="wc-time">🕐 ${w.time}</div>
+      </div>
+      <div class="wc-win">
+        <div class="wc-amount" style="${i===0?'color:var(--gold);font-size:16px;':''}">+KSH ${(+w.win).toLocaleString()}</div>
+        <div class="wc-mult">${(+w.mult).toFixed(2)}× multiplier</div>
+      </div>
+    </div>`).join('');
+}
+
+function startTicker() {
+  function make(){
+    const data=getAviatorData();const hist=data.history;
+    const items=[
+      '🎯 Pattern reading '+hist.length+' real rounds',
+      '✅ MwanaKe254 cashed out at 3.1× using PRO signals',
+      '🔥 NairobiStar won KSH 12,100 at 12.1×',
+      '📈 Trend: '+(hist.length>3?(hist[0]>hist[2]?'BULLISH ↑':'BEARISH ↓'):'SCANNING'),
+      '✅ BetKing254 won KSH 16,600 at 8.3×',
+      '⚡ Low streak detected — high multiplier expected',
+      '🎯 Prediction accuracy: '+(predTotal>0?Math.round(predWins/predTotal*100)+'%':'calculating...'),
+      '✅ SimbaFly cashed out at 34.7× for KSH 6,940',
+      '📊 Session avg: '+(hist.length>0?(hist.slice(0,20).reduce((a,b)=>a+b,0)/Math.min(20,hist.length)).toFixed(2)+'×':'—'),
+    ];
+    document.getElementById('tickerEl').textContent=items.join('   •   ');
+  }
+  make();setInterval(make,20000);
+}
+
+// NAV — also updates bottom mobile nav
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn,.bn-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+page).classList.add('active');
+  const nb=document.getElementById('nav-'+page);if(nb)nb.classList.add('on');
+  const bb=document.getElementById('bn-'+page);if(bb)bb.classList.add('on');
+  currentPage=page;
+  if(page==='winners')renderWinners();
+  if(page==='hist')renderHistTable();
+}
+
+// SUBSCRIPTION
+function openSub(){document.getElementById('subModal').classList.add('show');selPlan('pro');}
+function closeSub(){document.getElementById('subModal').classList.remove('show');}
+function handleSubBg(e){if(e.target===document.getElementById('subModal'))closeSub();}
+
+function selPlan(plan){
+  selPlanId=plan;
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('pc-'+plan).classList.add('sel');
+  const prices={free:'KES 0',pro:'KES 299',vip:'KES 799'};
+  document.getElementById('subAmtHint').textContent=prices[plan];
+}
+function selPayM(method){
+  selPayMethod=method;
+  document.querySelectorAll('.pm').forEach(p=>p.classList.remove('sel'));
+  document.getElementById('pm-'+method).classList.add('sel');
+  const m=payMethods[method];
+  document.getElementById('pnbTitle').textContent=m.title;
+  document.getElementById('pnbNum').textContent=m.num;
+  document.getElementById('pnbName').textContent=m.name;
+  const steps={'send':'+254759401893','till':'7500448','airtel':'+254100000000'};
+  document.querySelectorAll('.sub-step')[2].querySelector('div:last-child').innerHTML=`Enter: <b style="color:var(--text)">${steps[method]}</b>`;
+}
+function copySubNum(){
+  const n=payMethods[selPayMethod].num.replace(/\s/g,'');
+  navigator.clipboard.writeText(n).catch(()=>{});
+  showToast('📋 Copied: '+n,'t-info');
+}
+function submitSub(){
+  if(selPlanId==='free'){closeSub();return;}
+  userPlan=selPlanId;
+  updatePlanUI();closeSub();
+  showToast(`🎉 ${selPlanId.toUpperCase()} activated! Unlimited predictions unlocked!`,'t-win');
+}
+function updatePlanUI(){
+  const badge=document.getElementById('planBadge');
+  const profBadge=document.getElementById('profilePlanBadge');
+  const pd=document.getElementById('planSettingDesc');
+  if(userPlan==='free'){
+    badge.className='plan-badge plan-free';badge.textContent='⭐ FREE';
+    profBadge.className='ph-plan-badge plan-free';profBadge.textContent='⭐ Free Plan';
+    pd.textContent='Free — 5 predictions/day';
+    document.getElementById('advLock').style.display='';
+  } else if(userPlan==='pro'){
+    badge.className='plan-badge plan-pro';badge.textContent='⭐ PRO';
+    profBadge.className='ph-plan-badge plan-pro';profBadge.textContent='⭐ PRO Plan';
+    pd.textContent='PRO — Unlimited predictions';
+    document.getElementById('advLock').style.display='none';
+  } else {
+    badge.className='plan-badge plan-vip';badge.textContent='👑 VIP';
+    profBadge.className='ph-plan-badge plan-vip';profBadge.textContent='👑 VIP Plan';
+    pd.textContent='VIP — All features + insider signals';
+    document.getElementById('advLock').style.display='none';
+  }
+}
+
+function showToast(msg,cls='t-info'){
+  const wrap=document.getElementById('toastWrap');
+  const t=document.createElement('div');
+  t.className='toast '+cls;t.textContent=msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),380);},4000);
+}
+</script>
+</body>
+</html>
