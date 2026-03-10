@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Prediction - Win Real Money</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .balance-display {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .layer { display: none; }
+        .layer.active { display: block; animation: fadeIn 0.5s; }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .period-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .period-number {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .countdown {
+            font-size: 48px;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .color-btn {
+            padding: 40px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-btn:active { transform: scale(0.95); }
+
+        .btn-green {
+            background: linear-gradient(135deg, #00e676, #00c853);
+        }
+
+        .btn-violet {
+            background: linear-gradient(135deg, #d500f9, #aa00ff);
+        }
+
+        .btn-red {
+            background: linear-gradient(135deg, #ff1744, #d50000);
+        }
+
+        .bet-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .bet-chip {
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            color: #667eea;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .bet-chip.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .place-bet-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffd700, #ffab00);
+            color: #000;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s;
+        }
+
+        .place-bet-btn:hover { transform: translateY(-2px); }
+        .place-bet-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-display {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .result-display.show { display: block; animation: slideUp 0.5s; }
+
+        .result-number {
+            font-size: 80px;
+            font-weight: 900;
+            margin: 20px 0;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .result-color {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 20px auto;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .win-message {
+            font-size: 36px;
+            font-weight: 900;
+            margin: 20px 0;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .game-history {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            color: #333;
+        }
+
+        .history-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #667eea;
+        }
+
+        .history-items {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .history-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-form {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            margin: 60px auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-form h2 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #333;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .deposit-methods {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .payment-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffd700;
+        }
+
+        .payment-details {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 12px;
+            border: 2px solid #ffd700;
+        }
+
+        .copy-btn {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .game-card { padding: 20px; }
+            .color-btn { padding: 30px 10px; font-size: 16px; }
+            .countdown { font-size: 36px; }
+            .result-number { font-size: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div id="welcomeLayer" class="layer active">
+    <nav class="navbar">
+        <div class="logo">🎯 COLOR GAME</div>
+        <div>
+            <button class="btn-submit" style="width: auto; padding: 10px 24px;" onclick="showLayer('loginLayer')">Login</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div style="text-align: center; padding: 60px 20px;">
+            <h1 style="font-size: 56px; margin-bottom: 20px;">🎨 COLOR PREDICTION</h1>
+            <p style="font-size: 24px; margin-bottom: 40px; opacity: 0.9;">Pick a Color. Win 2x to 4.5x Your Money!</p>
+            <button class="place-bet-btn" style="max-width: 400px; margin: 0 auto;" onclick="showLayer('signupLayer')">🚀 Start Playing Now</button>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">50K+</div>
+                <div class="stat-label">Active Players</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$2M+</div>
+                <div class="stat-label">Won Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Payout Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Support</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SIGNUP -->
+<div id="signupLayer" class="layer">
+    <div class="auth-form">
+        <h2>🎯 Join Now</h2>
+        <form onsubmit="handleSignup(); return false;">
+            <input type="text" class="input" id="signupName" placeholder="Full Name" required>
+            <input type="email" class="input" id="signupEmail" placeholder="Email" required>
+            <input type="tel" class="input" id="signupPhone" placeholder="Phone Number" required>
+            <input type="password" class="input" id="signupPassword" placeholder="Password" required>
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+        <div style="text-align: center; margin-top: 20px; color: #667eea;">
+            <a onclick="showLayer('loginLayer')" style="cursor: pointer;">Already have account? Login</a>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginLayer" class="layer">
+    <div class="auth-form">
+        <h2>🎯 Welcome Back</h2>
+        <form onsubmit="handleLogin(); return false;">
+            <input type="email" class="input" id="loginEmail" placeholder="Email" required>
+            <input type="password" class="input" id="loginPassword" placeholder="Password" required>
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
+        <div style="text-align: center; margin-top: 20px; color: #667eea;">
+            <a onclick="showLayer('signupLayer')" style="cursor: pointer;">Don't have account? Sign Up</a>
+        </div>
+    </div>
+</div>
+
+<!-- GAME -->
+<div id="gameLayer" class="layer">
+    <nav class="navbar">
+        <div class="logo">🎯 COLOR GAME</div>
+        <div class="balance-display" id="balanceNav">$25.00</div>
+    </nav>
+    
+    <div class="container">
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('game')">🎮 Play</button>
+            <button class="tab-btn" onclick="switchTab('history')">📊 History</button>
+            <button class="tab-btn" onclick="switchTab('deposit')">💰 Deposit</button>
+            <button class="tab-btn" onclick="switchTab('profile')">👤 Profile</button>
+        </div>
+
+        <!-- GAME TAB -->
+        <div id="gameTab">
+            <div class="game-card">
+                <div class="period-info">
+                    <div style="font-size: 14px; opacity: 0.9;">PERIOD</div>
+                    <div class="period-number" id="periodNumber">20260310001</div>
+                    <div style="margin: 16px 0;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">TIME REMAINING</div>
+                        <div class="countdown" id="countdown">30</div>
+                    </div>
+                </div>
+
+                <div style="color: #333; margin-bottom: 16px;">
+                    <strong>Select Color:</strong>
+                </div>
+                
+                <div class="color-buttons">
+                    <button class="color-btn btn-green" onclick="selectColor('green', 2)">
+                        🟢<br>GREEN<br><small>Win 2x</small>
+                    </button>
+                    <button class="color-btn btn-violet" onclick="selectColor('violet', 4.5)">
+                        🟣<br>VIOLET<br><small>Win 4.5x</small>
+                    </button>
+                    <button class="color-btn btn-red" onclick="selectColor('red', 2)">
+                        🔴<br>RED<br><small>Win 2x</small>
+                    </button>
+                </div>
+
+                <div style="color: #333; margin-bottom: 12px;">
+                    <strong>Select Amount:</strong>
+                </div>
+
+                <div class="bet-amounts">
+                    <div class="bet-chip" onclick="selectBet(10)">$10</div>
+                    <div class="bet-chip" onclick="selectBet(50)">$50</div>
+                    <div class="bet-chip" onclick="selectBet(100)">$100</div>
+                    <div class="bet-chip" onclick="selectBet(500)">$500</div>
+                </div>
+
+                <button id="placeBetBtn" class="place-bet-btn" onclick="placeBet()">
+                    PLACE BET - $<span id="betAmountDisplay">10</span>
+                </button>
+            </div>
+
+            <div id="resultDisplay" class="result-display">
+                <div style="font-size: 18px; opacity: 0.9;">RESULT</div>
+                <div class="result-number" id="resultNumber">5</div>
+                <div class="result-color" id="resultColor" style="background: green;"></div>
+                <div id="winMessage" class="win-message"></div>
+            </div>
+
+            <div class="game-history">
+                <div class="history-title">Last 20 Results</div>
+                <div class="history-items" id="historyItems"></div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="historyTab" style="display: none;">
+            <div class="game-card">
+                <h3 style="color: #667eea; margin-bottom: 20px;">My Bets</h3>
+                <div id="myBets" style="color: #333;"></div>
+            </div>
+        </div>
+
+        <!-- DEPOSIT TAB -->
+        <div id="depositTab" style="display: none;">
+            <div class="game-card">
+                <h3 style="color: #667eea; margin-bottom: 20px;">💰 Deposit Funds</h3>
+                
+                <div class="deposit-methods">
+                    <div class="payment-card" onclick="showPayment('mpesa')">
+                        <strong style="color: white;">📱 M-Pesa</strong>
+                        <div id="mpesaDetails" class="payment-details" style="display: none;">
+                            <div><strong>Phone:</strong> 0759401893</div>
+                            <div><strong>Till:</strong> 7500474</div>
+                            <button class="copy-btn" onclick="copyText('0759401893')">Copy Phone</button>
+                            <button class="copy-btn" onclick="copyText('7500474')">Copy Till</button>
+                        </div>
+                    </div>
+
+                    <div class="payment-card" onclick="showPayment('bank')">
+                        <strong style="color: white;">🏦 Bank Transfer</strong>
+                        <div id="bankDetails" class="payment-details" style="display: none;">
+                            <div><strong>Bank:</strong> Equity Bank</div>
+                            <div><strong>Account:</strong> 0310184912429</div>
+                            <button class="copy-btn" onclick="copyText('0310184912429')">Copy Account</button>
+                        </div>
+                    </div>
+
+                    <div class="payment-card" onclick="showPayment('crypto')">
+                        <strong style="color: white;">₿ Cryptocurrency</strong>
+                        <div id="cryptoDetails" class="payment-details" style="display: none;">
+                            <div><strong>USDT (TRC-20):</strong></div>
+                            <div style="font-size: 12px; word-break: break-all;">TK4rUz6TUEd7zCWeuiX5R47pSNdPswJnAc</div>
+                            <button class="copy-btn" onclick="copyText('TK4rUz6TUEd7zCWeuiX5R47pSNdPswJnAc')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 16px; background: rgba(255, 215, 0, 0.2); border-radius: 10px; color: #333;">
+                    <strong>⚠️ Important:</strong> After payment, contact support with transaction reference.
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div id="profileTab" style="display: none;">
+            <div class="game-card">
+                <h3 style="color: #667eea; margin-bottom: 20px;">👤 Profile</h3>
+                <div style="color: #333;">
+                    <div style="margin-bottom: 12px;"><strong>Name:</strong> <span id="profileName"></span></div>
+                    <div style="margin-bottom: 12px;"><strong>Email:</strong> <span id="profileEmail"></span></div>
+                    <div style="margin-bottom: 12px;"><strong>Balance:</strong> $<span id="profileBalance">25.00</span></div>
+                    <button class="btn-submit" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let user = null;
+let balance = 25.00;
+let selectedColor = null;
+let selectedMultiplier = 0;
+let betAmount = 10;
+let countdown = 30;
+let period = 20260310001;
+let history = [];
+let myBets = [];
+let gameInterval = null;
+let isPlaying = false;
+
+const COLORS = {
+    0: 'violet', 1: 'green', 2: 'red', 3: 'green', 4: 'red',
+    5: 'green', 6: 'red', 7: 'green', 8: 'red', 9: 'violet'
+};
+
+function showLayer(id) {
+    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    ['gameTab', 'historyTab', 'depositTab', 'profileTab'].forEach(t => {
+        document.getElementById(t).style.display = 'none';
+    });
+    document.getElementById(tab + 'Tab').style.display = 'block';
+    
+    if (tab === 'history') updateMyBets();
+    if (tab === 'profile') updateProfile();
+}
+
+function handleSignup() {
+    user = {
+        name: document.getElementById('signupName').value,
+        email: document.getElementById('signupEmail').value,
+        phone: document.getElementById('signupPhone').value
+    };
+    localStorage.setItem('colorUser', JSON.stringify(user));
+    showLayer('gameLayer');
+    startGame();
+    return false;
+}
+
+function handleLogin() {
+    const saved = localStorage.getItem('colorUser');
+    if (saved) {
+        user = JSON.parse(saved);
+        showLayer('gameLayer');
+        startGame();
+    } else {
+        alert('No account found');
+    }
+    return false;
+}
+
+function handleLogout() {
+    user = null;
+    stopGame();
+    showLayer('welcomeLayer');
+}
+
+function startGame() {
+    updateBalance();
+    updateHistory();
+    startRound();
+}
+
+function startRound() {
+    countdown = 30;
+    isPlaying = false;
+    document.getElementById('placeBetBtn').disabled = false;
+    document.getElementById('resultDisplay').classList.remove('show');
+    
+    gameInterval = setInterval(() => {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        
+        if (countdown <= 0) {
+            clearInterval(gameInterval);
+            showResult();
+        }
+    }, 1000);
+}
+
+function stopGame() {
+    if (gameInterval) clearInterval(gameInterval);
+}
+
+function selectColor(color, multiplier) {
+    selectedColor = color;
+    selectedMultiplier = multiplier;
+}
+
+function selectBet(amount) {
+    betAmount = amount;
+    document.querySelectorAll('.bet-chip').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('betAmountDisplay').textContent = amount;
+}
+
+function placeBet() {
+    if (!selectedColor) {
+        alert('Please select a color!');
+        return;
+    }
+    
+    if (betAmount > balance) {
+        alert('Insufficient balance!');
+        return;
+    }
+    
+    balance -= betAmount;
+    updateBalance();
+    isPlaying = true;
+    document.getElementById('placeBetBtn').disabled = true;
+    
+    myBets.push({
+        period: period,
+        color: selectedColor,
+        amount: betAmount,
+        multiplier: selectedMultiplier,
+        time: new Date().toLocaleTimeString()
+    });
+}
+
+function showResult() {
+    const resultNum = Math.floor(Math.random() * 10);
+    const resultCol = COLORS[resultNum];
+    
+    document.getElementById('resultNumber').textContent = resultNum;
+    document.getElementById('resultColor').style.background = 
+        resultCol === 'green' ? '#00e676' : 
+        resultCol === 'red' ? '#ff1744' : '#d500f9';
+    
+    history.unshift({ number: resultNum, color: resultCol });
+    if (history.length > 20) history.pop();
+    updateHistory();
+    
+    if (isPlaying && selectedColor === resultCol) {
+        const winAmount = betAmount * selectedMultiplier;
+        balance += winAmount;
+        updateBalance();
+        document.getElementById('winMessage').textContent = 
+            `🎉 YOU WON $${winAmount.toFixed(2)}!`;
+        myBets[myBets.length - 1].result = 'WIN';
+        myBets[myBets.length - 1].won = winAmount;
+    } else if (isPlaying) {
+        document.getElementById('winMessage').textContent = '😢 Try Again!';
+        myBets[myBets.length - 1].result = 'LOSS';
+    }
+    
+    document.getElementById('resultDisplay').classList.add('show');
+    
+    period++;
+    document.getElementById('periodNumber').textContent = period;
+    
+    setTimeout(() => {
+        selectedColor = null;
+        startRound();
+    }, 5000);
+}
+
+function updateBalance() {
+    const bal = '$' + balance.toFixed(2);
+    document.getElementById('balanceNav').textContent = bal;
+    document.getElementById('profileBalance').textContent = balance.toFixed(2);
+}
+
+function updateHistory() {
+    let html = '';
+    history.forEach(h => {
+        const bg = h.color === 'green' ? '#00e676' : 
+                    h.color === 'red' ? '#ff1744' : '#d500f9';
+        html += `<div class="history-item" style="background: ${bg}">${h.number}</div>`;
+    });
+    document.getElementById('historyItems').innerHTML = html;
+}
+
+function updateMyBets() {
+    let html = '';
+    myBets.reverse().forEach(bet => {
+        const resultColor = bet.result === 'WIN' ? '#00e676' : '#ff1744';
+        html += `
+            <div style="padding: 12px; background: #f5f5f5; border-radius: 8px; margin-bottom: 8px;">
+                <div><strong>Period:</strong> ${bet.period}</div>
+                <div><strong>Color:</strong> ${bet.color}</div>
+                <div><strong>Amount:</strong> $${bet.amount}</div>
+                <div style="color: ${resultColor}"><strong>${bet.result || 'PENDING'}</strong> 
+                ${bet.won ? '$' + bet.won.toFixed(2) : ''}</div>
+            </div>
+        `;
+    });
+    document.getElementById('myBets').innerHTML = html || 'No bets yet';
+}
+
+function updateProfile() {
+    document.getElementById('profileName').textContent = user.name;
+    document.getElementById('profileEmail').textContent = user.email;
+}
+
+function showPayment(method) {
+    ['mpesaDetails', 'bankDetails', 'cryptoDetails'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
+    });
+    document.getElementById(method + 'Details').style.display = 'block';
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text);
+    alert('✅ Copied: ' + text);
+}
+
+window.onload = function() {
+    const saved = localStorage.getItem('colorUser');
+    if (saved) {
+        user = JSON.parse(saved);
+        showLayer('gameLayer');
+        startGame();
+    }
+};
+</script>
+
+</body>
+</html>
