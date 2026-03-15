@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Prediction - Win Real Money</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #00ff88;
+            --red: #ff3366;
+            --violet: #cc44ff;
+            --gold: #ffd700;
+            --dark: #0a0a1a;
+            --card: #12122a;
+            --card2: #1a1a35;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(100,60,200,0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(0,255,136,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+        @keyframes glow { 0%,100% { text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold); } 50% { text-shadow: 0 0 40px var(--gold), 0 0 80px var(--gold); } }
+        @keyframes tickerScroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes slideDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+
+        /* TICKER */
+        .ticker-bar {
+            background: linear-gradient(90deg, #1a0a2e, #0d1a2e, #1a0a2e);
+            border-bottom: 1px solid var(--border);
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+        .ticker-track {
+            display: flex;
+            gap: 60px;
+            animation: tickerScroll 22s linear infinite;
+            white-space: nowrap;
+        }
+        .ticker-item {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(10,10,26,0.95);
+            backdrop-filter: blur(20px);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, #ff88cc 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            letter-spacing: 1px;
+        }
+
+        .balance-pill {
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+            border: 1.5px solid rgba(255,215,0,0.4);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255,215,0,0.1);
+        }
+
+        .container { max-width: 520px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
+
+        .layer { display: none; }
+        .layer.active { display: block; animation: fadeIn 0.4s ease; }
+
+        /* CARDS */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        /* PERIOD BOX */
+        .period-box {
+            background: linear-gradient(135deg, #12122a, #1e1040);
+            border: 1px solid rgba(150,80,255,0.3);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .period-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #9955ff, var(--gold), #9955ff, transparent);
+        }
+        .period-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 6px;
+        }
+        .period-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+        .countdown-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 4px;
+        }
+        .countdown {
+            font-family: 'Orbitron', monospace;
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--gold);
+            animation: glow 2s ease-in-out infinite;
+            line-height: 1;
+        }
+        .countdown.urgent { color: var(--red); animation: pulse 0.5s ease-in-out infinite; }
+
+        /* COLOR BUTTONS */
+        .color-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .color-btn {
+            padding: 0;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.25s;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .color-btn-inner {
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .color-btn .emoji { font-size: 26px; }
+        .color-btn .name { font-size: 13px; }
+        .color-btn .mult {
+            font-size: 11px;
+            opacity: 0.8;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .btn-green {
+            background: linear-gradient(160deg, #003322, #005533);
+            border-color: rgba(0,255,136,0.3);
+            box-shadow: 0 4px 20px rgba(0,255,136,0.15), inset 0 1px 0 rgba(0,255,136,0.2);
+        }
+        .btn-green:hover, .btn-green.selected {
+            background: linear-gradient(160deg, #00aa55, #00cc66);
+            border-color: var(--green);
+            box-shadow: 0 0 30px rgba(0,255,136,0.5), 0 4px 20px rgba(0,255,136,0.3);
+            transform: translateY(-3px);
+        }
+
+        .btn-violet {
+            background: linear-gradient(160deg, #220033, #330055);
+            border-color: rgba(180,60,255,0.3);
+            box-shadow: 0 4px 20px rgba(180,60,255,0.15), inset 0 1px 0 rgba(180,60,255,0.2);
+        }
+        .btn-violet:hover, .btn-violet.selected {
+            background: linear-gradient(160deg, #8800cc, #aa00ff);
+            border-color: var(--violet);
+            box-shadow: 0 0 30px rgba(180,60,255,0.5), 0 4px 20px rgba(180,60,255,0.3);
+            transform: translateY(-3px);
+        }
+
+        .btn-red {
+            background: linear-gradient(160deg, #330011, #550022);
+            border-color: rgba(255,50,100,0.3);
+            box-shadow: 0 4px 20px rgba(255,50,100,0.15), inset 0 1px 0 rgba(255,50,100,0.2);
+        }
+        .btn-red:hover, .btn-red.selected {
+            background: linear-gradient(160deg, #cc1144, #ff1155);
+            border-color: var(--red);
+            box-shadow: 0 0 30px rgba(255,50,100,0.5), 0 4px 20px rgba(255,50,100,0.3);
+            transform: translateY(-3px);
+        }
+
+        /* BET CHIPS */
+        .bet-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .bet-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .bet-chip {
+            padding: 12px 8px;
+            border: 1.5px solid rgba(255,215,0,0.2);
+            border-radius: 10px;
+            background: rgba(255,215,0,0.05);
+            color: rgba(255,255,255,0.7);
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .bet-chip:hover { border-color: var(--gold); color: var(--gold); }
+        .bet-chip.active {
+            background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,150,0,0.15));
+            border-color: var(--gold);
+            color: var(--gold);
+            box-shadow: 0 0 15px rgba(255,215,0,0.2);
+        }
+
+        /* PLACE BET BUTTON */
+        .place-bet-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00, #ff8800);
+            color: #000;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 30px rgba(255,180,0,0.35), 0 2px 0 rgba(255,255,255,0.3) inset;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .place-bet-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .place-bet-btn:hover::before { left: 150%; }
+        .place-bet-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,180,0,0.5); }
+        .place-bet-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        /* RESULT DISPLAY */
+        .result-display {
+            background: linear-gradient(135deg, #12122a, #1a0a30);
+            border: 1px solid rgba(150,80,255,0.3);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 16px;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .result-display::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #9955ff, transparent);
+        }
+        .result-display.show { display: block; animation: slideDown 0.4s ease; }
+
+        .result-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 12px;
+        }
+        .result-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 80px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 16px;
+            animation: popIn 0.5s ease;
+        }
+        .result-color-ball {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            animation: popIn 0.5s 0.1s ease both;
+            box-shadow: 0 0 30px currentColor;
+        }
+        .win-message {
+            font-family: 'Orbitron', monospace;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            animation: popIn 0.4s 0.2s ease both;
+        }
+        .win-message.win { color: var(--gold); text-shadow: 0 0 20px var(--gold); }
+        .win-message.lose { color: var(--red); }
+
+        /* GAME HISTORY */
+        .history-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .history-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* TAB NAV */
+        .tab-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+            background: var(--card);
+            padding: 6px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        .tab-btn {
+            padding: 10px 6px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: rgba(255,255,255,0.4);
+            font-family: 'Nunito', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            letter-spacing: 0.3px;
+        }
+        .tab-btn .tab-icon { font-size: 18px; }
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(100,60,200,0.4), rgba(80,40,160,0.4));
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(100,60,200,0.3);
+        }
+
+        /* AUTH */
+        .auth-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .auth-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 36px 28px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--violet), var(--gold), var(--green));
+        }
+        .auth-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 26px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .auth-sub {
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+        .auth-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            color: rgba(255,255,255,0.8);
+            letter-spacing: 1px;
+        }
+
+        .input-group { margin-bottom: 14px; }
+        .input-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--card2);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .input:focus { border-color: rgba(150,80,255,0.6); box-shadow: 0 0 0 3px rgba(150,80,255,0.1); }
+        .input::placeholder { color: rgba(255,255,255,0.2); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6633cc, #9944ff);
+            color: white;
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            margin-top: 6px;
+            box-shadow: 0 8px 25px rgba(120,50,255,0.35);
+            transition: all 0.25s;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(120,50,255,0.5); }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+        .auth-link a {
+            color: var(--gold);
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* WELCOME */
+        .welcome-hero {
+            text-align: center;
+            padding: 50px 20px 30px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,150,0,0.1));
+            border: 1px solid rgba(255,215,0,0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #fff 0%, var(--gold) 60%, #ff88cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 30px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .hero-btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(255,180,0,0.4);
+            transition: all 0.3s;
+        }
+        .hero-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 50px rgba(255,180,0,0.6); }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 0 16px 30px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+        }
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--gold);
+        }
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* DEPOSIT */
+        .payment-card {
+            background: var(--card2);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 10px;
+        }
+        .payment-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255,215,0,0.1);
+        }
+        .payment-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .payment-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: rgba(255,255,255,0.05);
+        }
+        .payment-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+        .payment-arrow {
+            margin-left: auto;
+            color: rgba(255,255,255,0.3);
+            font-size: 18px;
+            transition: transform 0.2s;
+        }
+        .payment-card.open .payment-arrow { transform: rotate(90deg); color: var(--gold); }
+
+        .payment-details {
+            display: none;
+            margin-top: 14px;
+            padding: 14px;
+            background: rgba(255,215,0,0.05);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 10px;
+        }
+        .payment-details.show { display: block; animation: fadeIn 0.3s ease; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-key {
+            font-size: 11px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .detail-val {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+        }
+        .copy-btn {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,150,0,0.1));
+            border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 8px;
+            color: var(--gold);
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,215,0,0.3); }
+
+        .alert-box {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05));
+            border: 1px solid rgba(255,215,0,0.25);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* PROFILE */
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6633cc, #9944ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 16px;
+            box-shadow: 0 0 30px rgba(120,50,255,0.4);
+        }
+        .profile-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .profile-email {
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .profile-balance-box {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,150,0,0.05));
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-bal-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .profile-bal-val {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--gold);
+        }
+        .logout-btn {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid rgba(255,50,80,0.4);
+            border-radius: 12px;
+            background: rgba(255,50,80,0.08);
+            color: var(--red);
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover { background: rgba(255,50,80,0.2); border-color: var(--red); }
+
+        /* MY BETS */
+        .bet-row {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 6px;
+        }
+        .bet-period {
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .bet-color-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .bet-amount-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 6px;
+        }
+        .bet-result-tag {
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 900;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-align: center;
+            align-self: center;
+        }
+        .tag-win { background: rgba(0,255,136,0.15); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+        .tag-lose { background: rgba(255,50,80,0.15); color: var(--red); border: 1px solid rgba(255,50,80,0.3); }
+        .tag-pending { background: rgba(255,215,0,0.1); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            z-index: 999;
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+    <div class="ticker-track">
+        <span class="ticker-item">🟢 James W. WON $480</span>
+        <span class="ticker-item">🔴 Amara K. WON $200</span>
+        <span class="ticker-item">🟣 David M. WON $900</span>
+        <span class="ticker-item">🟢 Linet O. WON $320</span>
+        <span class="ticker-item">🔴 Brian T. WON $150</span>
+        <span class="ticker-item">🟣 Fatuma A. WON $1,350</span>
+        <span class="ticker-item">🟢 Kevin R. WON $240</span>
+        <span class="ticker-item">🔴 Grace N. WON $500</span>
+        <span class="ticker-item">🟣 Moses L. WON $2,250</span>
+        <span class="ticker-item">🟢 Esther M. WON $180</span>
+    </div>
+</div>
+
+<!-- WELCOME LAYER -->
+<div id="welcomeLayer" class="layer active">
+    <nav class="navbar">
+        <div class="logo">🎯 COLOR GAME</div>
+        <button class="btn-submit" style="width:auto;padding:10px 22px;font-size:12px;" onclick="showLayer('loginLayer')">LOGIN</button>
+    </nav>
+    <div class="welcome-hero">
+        <div class="hero-badge">🔥 Live — Win Real Cash</div>
+        <h1 class="hero-title">COLOR<br>PREDICTION</h1>
+        <p class="hero-sub">Pick a color. Win up to <strong style="color:var(--gold)">4.5× your money</strong>.<br>New round every 30 seconds.</p>
+        <button class="hero-btn" onclick="showLayer('signupLayer')">🚀 PLAY NOW — FREE SIGNUP</button>
+    </div>
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-value">50K+</div><div class="stat-label">Active Players</div></div>
+        <div class="stat-card"><div class="stat-value">$2M+</div><div class="stat-label">Won Today</div></div>
+        <div class="stat-card"><div class="stat-value">98%</div><div class="stat-label">Payout Rate</div></div>
+        <div class="stat-card"><div class="stat-value">24/7</div><div class="stat-label">Live Support</div></div>
+    </div>
+</div>
+
+<!-- SIGNUP LAYER -->
+<div id="signupLayer" class="layer">
+    <div class="auth-wrap">
+        <div class="auth-card">
+            <div class="auth-logo">🎯 COLOR GAME</div>
+            <div class="auth-sub">Create your account & start winning</div>
+            <div class="auth-title">CREATE ACCOUNT</div>
+            <form onsubmit="handleSignup(); return false;">
+                <div class="input-group">
+                    <label class="input-label">Full Name</label>
+                    <input type="text" class="input" id="signupName" placeholder="Enter your name" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <input type="email" class="input" id="signupEmail" placeholder="you@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input type="tel" class="input" id="signupPhone" placeholder="07XXXXXXXX" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <input type="password" class="input" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                <button type="submit" class="btn-submit">CREATE ACCOUNT</button>
+            </form>
+            <div class="auth-link">Already have an account? <a onclick="showLayer('loginLayer')">Sign In</a></div>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN LAYER -->
+<div id="loginLayer" class="layer">
+    <div class="auth-wrap">
+        <div class="auth-card">
+            <div class="auth-logo">🎯 COLOR GAME</div>
+            <div class="auth-sub">Welcome back — let's win big</div>
+            <div class="auth-title">SIGN IN</div>
+            <form onsubmit="handleLogin(); return false;">
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <input type="email" class="input" id="loginEmail" placeholder="you@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <input type="password" class="input" id="loginPassword" placeholder="Your password" required>
+                </div>
+                <button type="submit" class="btn-submit">SIGN IN</button>
+            </form>
+            <div class="auth-link">New here? <a onclick="showLayer('signupLayer')">Create Account</a></div>
+        </div>
+    </div>
+</div>
+
+<!-- GAME LAYER -->
+<div id="gameLayer" class="layer">
+    <nav class="navbar">
+        <div class="logo">🎯 COLOR GAME</div>
+        <div class="balance-pill" id="balanceNav">$25.00</div>
+    </nav>
+
+    <div class="container">
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('game', this)">
+                <span class="tab-icon">🎮</span> Play
+            </button>
+            <button class="tab-btn" onclick="switchTab('history', this)">
+                <span class="tab-icon">📊</span> History
+            </button>
+            <button class="tab-btn" onclick="switchTab('deposit', this)">
+                <span class="tab-icon">💰</span> Deposit
+            </button>
+            <button class="tab-btn" onclick="switchTab('profile', this)">
+                <span class="tab-icon">👤</span> Profile
+            </button>
+        </div>
+
+        <!-- GAME TAB -->
+        <div id="gameTab">
+            <div class="card" style="padding:0;overflow:hidden;">
+                <div class="period-box" style="border-radius:20px 20px 0 0;margin-bottom:0;">
+                    <div class="period-label">PERIOD</div>
+                    <div class="period-number" id="periodNumber">20260310001</div>
+                    <div class="countdown-label">TIME REMAINING</div>
+                    <div class="countdown" id="countdown">30</div>
+                </div>
+                <div style="padding:22px;">
+                    <div class="color-label">Choose Your Color</div>
+                    <div class="color-buttons">
+                        <button class="color-btn btn-green" onclick="selectColor('green', 2, this)">
+                            <div class="color-btn-inner">
+                                <span class="emoji">🟢</span>
+                                <span class="name">GREEN</span>
+                                <span class="mult">Win 2×</span>
+                            </div>
+                        </button>
+                        <button class="color-btn btn-violet" onclick="selectColor('violet', 4.5, this)">
+                            <div class="color-btn-inner">
+                                <span class="emoji">🟣</span>
+                                <span class="name">VIOLET</span>
+                                <span class="mult">Win 4.5×</span>
+                            </div>
+                        </button>
+                        <button class="color-btn btn-red" onclick="selectColor('red', 2, this)">
+                            <div class="color-btn-inner">
+                                <span class="emoji">🔴</span>
+                                <span class="name">RED</span>
+                                <span class="mult">Win 2×</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="bet-label">Select Bet Amount</div>
+                    <div class="bet-amounts">
+                        <div class="bet-chip" onclick="selectBet(10, this)">$10</div>
+                        <div class="bet-chip" onclick="selectBet(50, this)">$50</div>
+                        <div class="bet-chip" onclick="selectBet(100, this)">$100</div>
+                        <div class="bet-chip" onclick="selectBet(500, this)">$500</div>
+                    </div>
+
+                    <button id="placeBetBtn" class="place-bet-btn" onclick="placeBet()">
+                        ⚡ PLACE BET — $<span id="betAmountDisplay">10</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultDisplay" class="result-display">
+                <div class="result-label">ROUND RESULT</div>
+                <div class="result-number" id="resultNumber">—</div>
+                <div class="result-color-ball" id="resultColorBall"></div>
+                <div id="winMessage" class="win-message"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Last 20 Results</div>
+                <div class="history-row" id="historyItems"></div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="historyTab" style="display:none;">
+            <div class="card">
+                <div class="card-title">My Bet History</div>
+                <div id="myBets"></div>
+            </div>
+        </div>
+
+        <!-- DEPOSIT TAB -->
+        <div id="depositTab" style="display:none;">
+            <div class="card">
+                <div class="card-title">Deposit Funds</div>
+
+                <div class="payment-card" onclick="togglePayment(this, 'mpesaDetails')">
+                    <div class="payment-head">
+                        <div class="payment-icon">📱</div>
+                        <div>
+                            <div class="payment-name">M-PESA</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;">Mobile Money</div>
+                        </div>
+                        <span class="payment-arrow">›</span>
+                    </div>
+                    <div class="payment-details" id="mpesaDetails">
+                        <div class="detail-row">
+                            <span class="detail-key">Phone</span>
+                            <span class="detail-val">0759401893</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">Till No.</span>
+                            <span class="detail-val">7500474</span>
+                        </div>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyText('0759401893', 'Phone copied!')">📋 COPY PHONE</button>
+                        <button class="copy-btn" style="margin-top:6px;" onclick="event.stopPropagation(); copyText('7500474', 'Till number copied!')">📋 COPY TILL NO.</button>
+                    </div>
+                </div>
+
+                <div class="payment-card" onclick="togglePayment(this, 'bankDetails')">
+                    <div class="payment-head">
+                        <div class="payment-icon">🏦</div>
+                        <div>
+                            <div class="payment-name">BANK TRANSFER</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;">Equity Bank</div>
+                        </div>
+                        <span class="payment-arrow">›</span>
+                    </div>
+                    <div class="payment-details" id="bankDetails">
+                        <div class="detail-row">
+                            <span class="detail-key">Bank</span>
+                            <span class="detail-val">Equity Bank</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">Account</span>
+                            <span class="detail-val" style="font-size:11px;">0310184912429</span>
+                        </div>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyText('0310184912429', 'Account copied!')">📋 COPY ACCOUNT</button>
+                    </div>
+                </div>
+
+                <div class="payment-card" onclick="togglePayment(this, 'cryptoDetails')">
+                    <div class="payment-head">
+                        <div class="payment-icon">₿</div>
+                        <div>
+                            <div class="payment-name">CRYPTOCURRENCY</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;">USDT TRC-20</div>
+                        </div>
+                        <span class="payment-arrow">›</span>
+                    </div>
+                    <div class="payment-details" id="cryptoDetails">
+                        <div class="detail-row">
+                            <span class="detail-key">Network</span>
+                            <span class="detail-val">TRC-20</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">Address</span>
+                            <span class="detail-val" style="font-size:9px;word-break:break-all;">TK4rUz6TUEd7zCWeuiX5R47pSNdPswJnAc</span>
+                        </div>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyText('TK4rUz6TUEd7zCWeuiX5R47pSNdPswJnAc', 'Address copied!')">📋 COPY ADDRESS</button>
+                    </div>
+                </div>
+
+                <div class="alert-box">
+                    ⚠️ <strong style="color:var(--gold)">Important:</strong> After payment, contact support with your transaction reference to confirm deposit.
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div id="profileTab" style="display:none;">
+            <div class="card">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-name" id="profileName">—</div>
+                <div class="profile-email" id="profileEmail">—</div>
+                <div class="profile-balance-box">
+                    <div class="profile-bal-label">Current Balance</div>
+                    <div class="profile-bal-val">$<span id="profileBalance">25.00</span></div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">⏻ SIGN OUT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+let user = null;
+let balance = 25.00;
+let selectedColor = null;
+let selectedMultiplier = 0;
+let betAmount = 10;
+let countdown = 30;
+let period = 20260310001;
+let history = [];
+let myBets = [];
+let gameInterval = null;
+let isPlaying = false;
+
+const COLORS = {
+    0: 'violet', 1: 'green', 2: 'red', 3: 'green', 4: 'red',
+    5: 'green', 6: 'red', 7: 'green', 8: 'red', 9: 'violet'
+};
+const COLOR_MAP = {
+    green: { bg: 'var(--green)', tag: '#00ff88', dark: '#003322' },
+    red: { bg: 'var(--red)', tag: '#ff3366', dark: '#330011' },
+    violet: { bg: 'var(--violet)', tag: '#cc44ff', dark: '#220033' }
+};
+
+function showLayer(id) {
+    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['gameTab','historyTab','depositTab','profileTab'].forEach(t => {
+        document.getElementById(t).style.display = 'none';
+    });
+    document.getElementById(tab + 'Tab').style.display = 'block';
+    if (tab === 'history') updateMyBets();
+    if (tab === 'profile') updateProfile();
+}
+
+function handleSignup() {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const phone = document.getElementById('signupPhone').value;
+    if (!name || !email || !phone) return;
+    user = { name, email, phone };
+    localStorage.setItem('colorUser', JSON.stringify(user));
+    showLayer('gameLayer');
+    startGame();
+}
+
+function handleLogin() {
+    const saved = localStorage.getItem('colorUser');
+    if (saved) {
+        user = JSON.parse(saved);
+        showLayer('gameLayer');
+        startGame();
+    } else {
+        showToast('⚠️ No account found. Please sign up.');
+    }
+}
+
+function handleLogout() {
+    user = null;
+    stopGame();
+    showLayer('welcomeLayer');
+}
+
+function startGame() {
+    updateBalance();
+    updateHistory();
+    startRound();
+}
+
+function startRound() {
+    countdown = 30;
+    isPlaying = false;
+    selectedColor = null;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('placeBetBtn').disabled = false;
+    document.getElementById('resultDisplay').classList.remove('show');
+    document.getElementById('countdown').classList.remove('urgent');
+    if (gameInterval) clearInterval(gameInterval);
+
+    gameInterval = setInterval(() => {
+        countdown--;
+        const el = document.getElementById('countdown');
+        el.textContent = countdown;
+        if (countdown <= 5) el.classList.add('urgent');
+        if (countdown <= 0) {
+            clearInterval(gameInterval);
+            showResult();
+        }
+    }, 1000);
+}
+
+function stopGame() {
+    if (gameInterval) clearInterval(gameInterval);
+}
+
+function selectColor(color, multiplier, btn) {
+    selectedColor = color;
+    selectedMultiplier = multiplier;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function selectBet(amount, el) {
+    betAmount = amount;
+    document.querySelectorAll('.bet-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('betAmountDisplay').textContent = amount;
+}
+
+function placeBet() {
+    if (!selectedColor) { showToast('👆 Please select a color first!'); return; }
+    if (betAmount > balance) { showToast('💸 Insufficient balance!'); return; }
+    balance -= betAmount;
+    updateBalance();
+    isPlaying = true;
+    document.getElementById('placeBetBtn').disabled = true;
+    myBets.push({
+        period,
+        color: selectedColor,
+        amount: betAmount,
+        multiplier: selectedMultiplier,
+        time: new Date().toLocaleTimeString()
+    });
+    showToast('✅ Bet placed on ' + selectedColor.toUpperCase() + '!');
+}
+
+function showResult() {
+    const resultNum = Math.floor(Math.random() * 10);
+    const resultCol = COLORS[resultNum];
+    const colData = COLOR_MAP[resultCol];
+
+    document.getElementById('resultNumber').textContent = resultNum;
+    document.getElementById('resultNumber').style.color = colData.tag;
+    document.getElementById('resultColorBall').style.background = colData.bg;
+    document.getElementById('resultColorBall').style.boxShadow = '0 0 40px ' + colData.tag;
+
+    history.unshift({ number: resultNum, color: resultCol });
+    if (history.length > 20) history.pop();
+    updateHistory();
+
+    const msgEl = document.getElementById('winMessage');
+    if (isPlaying && selectedColor === resultCol) {
+        const winAmount = betAmount * selectedMultiplier;
+        balance += winAmount;
+        updateBalance();
+        msgEl.textContent = '🎉 YOU WON $' + winAmount.toFixed(2) + '!';
+        msgEl.className = 'win-message win';
+        myBets[myBets.length - 1].result = 'WIN';
+        myBets[myBets.length - 1].won = winAmount;
+        showToast('🎉 You won $' + winAmount.toFixed(2) + '!');
+    } else if (isPlaying) {
+        msgEl.textContent = '😢 Better luck next round!';
+        msgEl.className = 'win-message lose';
+        myBets[myBets.length - 1].result = 'LOSS';
+    } else {
+        msgEl.textContent = '👀 Result: ' + resultCol.toUpperCase() + ' ' + resultNum;
+        msgEl.className = 'win-message';
+        msgEl.style.color = colData.tag;
+    }
+
+    document.getElementById('resultDisplay').classList.add('show');
+    period++;
+    document.getElementById('periodNumber').textContent = period;
+    setTimeout(() => startRound(), 5000);
+}
+
+function updateBalance() {
+    const bal = '$' + balance.toFixed(2);
+    document.getElementById('balanceNav').textContent = bal;
+    document.getElementById('profileBalance').textContent = balance.toFixed(2);
+}
+
+function updateHistory() {
+    let html = '';
+    history.forEach(h => {
+        const c = COLOR_MAP[h.color];
+        html += '<div class="history-dot" style="background:' + c.dark + ';color:' + c.tag + ';border:1.5px solid ' + c.tag + '33;">' + h.number + '</div>';
+    });
+    document.getElementById('historyItems').innerHTML = html || '<span style="color:rgba(255,255,255,0.3);font-size:13px;">No results yet</span>';
+}
+
+function updateMyBets() {
+    if (!myBets.length) {
+        document.getElementById('myBets').innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;font-size:13px;">No bets placed yet</div>';
+        return;
+    }
+    let html = '';
+    [...myBets].reverse().forEach(bet => {
+        const c = COLOR_MAP[bet.color];
+        const tag = bet.result === 'WIN' ? 'tag-win' : bet.result === 'LOSS' ? 'tag-lose' : 'tag-pending';
+        const resultText = bet.result === 'WIN' ? '+$' + bet.won.toFixed(2) : bet.result || 'PENDING';
+        html += '<div class="bet-row">' +
+            '<div>' +
+                '<div class="bet-period">PERIOD #' + bet.period + '  ·  ' + bet.time + '</div>' +
+                '<span class="bet-color-tag" style="background:' + c.dark + ';color:' + c.tag + ';border:1px solid ' + c.tag + '44;">' + bet.color.toUpperCase() + '</span>' +
+                '<div class="bet-amount-label">Bet: <strong style="color:#fff;">$' + bet.amount + '</strong>  ·  Mult: <strong style="color:var(--gold);">' + bet.multiplier + '×</strong></div>' +
+            '</div>' +
+            '<div class="bet-result-tag ' + tag + '">' + resultText + '</div>' +
+        '</div>';
+    });
+    document.getElementById('myBets').innerHTML = html;
+}
+
+function updateProfile() {
+    if (!user) return;
+    document.getElementById('profileName').textContent = user.name;
+    document.getElementById('profileEmail').textContent = user.email;
+}
+
+function togglePayment(card, detailsId) {
+    const details = document.getElementById(detailsId);
+    const isOpen = details.classList.contains('show');
+    document.querySelectorAll('.payment-details').forEach(d => d.classList.remove('show'));
+    document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('open'));
+    if (!isOpen) {
+        details.classList.add('show');
+        card.classList.add('open');
+    }
+}
+
+function copyText(text, msg) {
+    navigator.clipboard.writeText(text).then(() => showToast('✅ ' + (msg || 'Copied!')));
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+window.onload = function() {
+    const saved = localStorage.getItem('colorUser');
+    if (saved) {
+        user = JSON.parse(saved);
+        showLayer('gameLayer');
+        startGame();
+    }
+};
+</script>
+</body>
+</html>
